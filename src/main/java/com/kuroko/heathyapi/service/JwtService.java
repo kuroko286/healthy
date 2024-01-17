@@ -23,6 +23,7 @@ public class JwtService {
     @Value("${app.jwt-secret}")
     private String secretKey;
 
+    // in here, username is email
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -42,7 +43,7 @@ public class JwtService {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(userDetails.getUsername()) // subject is email
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)

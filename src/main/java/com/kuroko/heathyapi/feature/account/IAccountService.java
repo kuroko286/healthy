@@ -18,4 +18,6 @@ public interface IAccountService {
     void deleteAccount(Long id);
 
     AuthResponse authenticate(LoginRequest loginRequest);
+
+    void updatePassword(Long id, String password);
 }

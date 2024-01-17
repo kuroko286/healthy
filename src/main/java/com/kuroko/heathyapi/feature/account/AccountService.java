@@ -1,5 +1,6 @@
 package com.kuroko.heathyapi.feature.account;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,10 @@ import com.kuroko.heathyapi.exception.business.ResourceNotFoundException;
 import com.kuroko.heathyapi.feature.account.payload.AuthResponse;
 import com.kuroko.heathyapi.feature.account.payload.LoginRequest;
 import com.kuroko.heathyapi.feature.account.payload.RegisterRequest;
+import com.kuroko.heathyapi.feature.meal.MealRepository;
 import com.kuroko.heathyapi.feature.user.User;
 import com.kuroko.heathyapi.feature.user.UserRepository;
+import com.kuroko.heathyapi.feature.water.WaterRepository;
 import com.kuroko.heathyapi.service.JwtService;
 
 @Service
@@ -24,6 +27,10 @@ public class AccountService implements IAccountService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private MealRepository mealRepository;
+    @Autowired
+    private WaterRepository waterRepository;
     @Autowired
     private JwtService jwtService;
     @Autowired
@@ -72,7 +79,11 @@ public class AccountService implements IAccountService {
 
         userRepository.save(user);
         accountRepository.save(account);
-        return new AuthResponse(jwtService.generateToken(new CustomUserDetails(account)));
+        AuthResponse authResponse = new AuthResponse(
+                jwtService.generateToken(new CustomUserDetails(account)), user);
+        authResponse.setConsumedMealsByDay(mealRepository.findByUserAndCreatedAt(user, new Date()));
+        authResponse.setConsumedWaterByDay(waterRepository.findByUserAndCreatedAt(user, new Date()));
+        return authResponse;
     }
 
     @Override
@@ -82,9 +93,20 @@ public class AccountService implements IAccountService {
         Account account = accountRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Account with email " + loginRequest.getEmail() + " not found"));
-
+        User user = account.getUser();
         String jwtToken = jwtService.generateToken(new CustomUserDetails(account));
-        return new AuthResponse(jwtToken);
+        AuthResponse authResponse = new AuthResponse(jwtToken, user);
+        authResponse.setConsumedMealsByDay(mealRepository.findByUserAndCreatedAt(user, new Date()));
+        authResponse.setConsumedWaterByDay(waterRepository.findByUserAndCreatedAt(user, new Date()));
+        return authResponse;
+    }
+
+    @Override
+    public void updatePassword(Long id, String password) {
+        Account account = accountRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+                "Account with id " + id + " not found"));
+        account.setPassword(passwordEncoder.encode(password));
+        accountRepository.save(account);
     }
 
 }

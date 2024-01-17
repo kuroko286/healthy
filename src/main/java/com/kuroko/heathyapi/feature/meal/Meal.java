@@ -7,6 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import com.kuroko.heathyapi.feature.user.User;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
@@ -20,6 +22,7 @@ public class Meal {
     private double protein;
     private double fat;
     private double calories;
+    @Enumerated(EnumType.STRING)
     private MealType type;
     @CreationTimestamp
     private Date createdAt;

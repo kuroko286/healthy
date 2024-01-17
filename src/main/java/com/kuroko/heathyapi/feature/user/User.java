@@ -17,11 +17,13 @@ public class User {
     private String name;
     private String goal;
     private String gender;
+    private String avatarURL;
     private int age;
     private double height;
     private double weight;
     private double coefficientOfActivity;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
     @OneToMany(orphanRemoval = true, mappedBy = "user") // when remote water from this list, it also delele from db
     private List<Water> water;

@@ -15,7 +15,7 @@ public class FoodController {
     public ResponseEntity<List<FoodDto>> getRecommendedFood() {
         // TODO: Implement recommended food
         return ResponseEntity.ok()
-                .body(List.of(1, 2, 3).stream().map((i) -> new FoodDto("Food name", "imageurl", 79)).toList());
+                .body(List.of(1, 2, 3).stream().map((i) -> new FoodDto()).toList());
     }
 
 }

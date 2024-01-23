@@ -48,9 +48,4 @@ public class SecurityConfig {
     // return new ProviderManager(daoAuthenticationProvider);
     // }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 }

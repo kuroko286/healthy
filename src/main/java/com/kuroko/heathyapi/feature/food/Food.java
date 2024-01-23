@@ -1,37 +1,40 @@
-package com.kuroko.heathyapi.feature.water;
+package com.kuroko.heathyapi.feature.food;
 
-import java.time.*;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.kuroko.heathyapi.feature.user.User;
+import com.kuroko.heathyapi.feature.components.Nutrition;
+import com.kuroko.heathyapi.feature.meal.Meal;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
-@AllArgsConstructor
+@Setter
+@Getter
 @NoArgsConstructor
-public class Water {
+public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private double amount; // in milis
-
+    private String name;
+    @Embedded
+    private Nutrition nutrition;
+    private double calories;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
-
+    private Meal meal;
 }

@@ -1,43 +1,35 @@
-package com.kuroko.heathyapi.feature.meal;
+package com.kuroko.heathyapi.feature.weight;
 
 import java.time.LocalDateTime;
-import java.util.*;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import com.kuroko.heathyapi.feature.food.Food;
 import com.kuroko.heathyapi.feature.user.User;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
-public class Meal {
+@Setter
+@Getter
+@NoArgsConstructor
+public class Weight {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Enumerated(EnumType.STRING)
-    private MealType type;
-
+    private double weight;
     @CreationTimestamp
     private LocalDateTime createdAt;
-
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-    @OneToMany(orphanRemoval = true, mappedBy = "meal")
-    private List<Food> foods;
-
-    public Meal() {
-        this.foods = new ArrayList<>();
-    }
-
 }

@@ -21,12 +21,13 @@ public class RegisterRequest {
     private String goal;
     @NotBlank(message = "Gender may not be blank")
     private String gender;
-    @NotBlank(message = "Age may not be blank")
+    @NotNull(message = "Age may not be blank")
+    @Min(value = 1, message = "Age must be greater than 0")
     private int age;
-    @NotBlank(message = "Height may not be blank")
+    @NotNull(message = "Height may not be blank")
     private double height;
-    @NotBlank(message = "Weight may not be blank")
+    @NotNull(message = "Weight may not be blank")
     private double weight;
-    @NotBlank(message = "Activity may not be blank")
+    @NotNull(message = "Activity may not be blank")
     private double coefficientOfActivity;
 }

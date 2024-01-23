@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,8 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kuroko.heathyapi.feature.account.payload.AuthResponse;
+import com.kuroko.heathyapi.feature.user.payload.Goal;
+import com.kuroko.heathyapi.feature.user.payload.GoalUpdatedDto;
+import com.kuroko.heathyapi.feature.user.payload.StatisticsDto;
+import com.kuroko.heathyapi.feature.user.payload.UserDto;
 import com.kuroko.heathyapi.feature.user.payload.UserReq;
-import com.kuroko.heathyapi.feature.user.payload.WeightDto;
+import com.kuroko.heathyapi.feature.weight.WeightDto;
 
 @RestController
 @RequestMapping("/v1/users")
@@ -22,32 +27,27 @@ public class UserController {
     private IUserService userService;
 
     @GetMapping("/statistics")
-    public ResponseEntity<?> getStatistics(@RequestParam int month, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<StatisticsDto> getStatistics(@RequestParam int month,
+            @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok().body(userService.getStatistics(month, token));
     }
 
     @GetMapping("/current")
-    public ResponseEntity<AuthResponse> getCurrentUser(@RequestHeader("Authorization") String token) {
-        return ResponseEntity.ok().body(userService.getCurrentUser(token));
+    public ResponseEntity<UserDto> getCurrentUser(@RequestAttribute("email") String email) {
+        return ResponseEntity.ok().body(userService.getCurrentUser(email));
     }
 
     @PutMapping
-    public ResponseEntity<?> updateUser(@RequestHeader("Authorization") String token, @RequestBody UserReq userData) {
-        // TODO: Implement update user
-        userService.updateUserInfo(token, userData);
-        return ResponseEntity.ok().body("User updated successfully");
+    public ResponseEntity<UserDto> updateUser(@RequestAttribute("email") String email,
+            @RequestBody UserReq userData) {
+        UserDto user = userService.updateUserInfo(email, userData);
+        return ResponseEntity.ok().body(user);
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateUserGoal(@RequestHeader("Authorization") String token, @RequestBody String goal) {
-        userService.updateUserGoal(token, goal);
-        return ResponseEntity.ok().body("User goal updated successfully");
-    }
-
-    @PostMapping("/weight")
-    public ResponseEntity<?> addUserWeight(@RequestHeader("Authorization") String token,
-            @RequestBody WeightDto weightDto) {
-        userService.addUserWeight(token, weightDto);
-        return ResponseEntity.ok().body("Weight added successfully");
+    @PutMapping("/goal")
+    public ResponseEntity<GoalUpdatedDto> updateUserGoal(@RequestAttribute("email") String email,
+            @RequestBody Goal goal) {
+        GoalUpdatedDto goalUpdated = userService.updateUserGoal(email, goal);
+        return ResponseEntity.ok().body(goalUpdated);
     }
 }

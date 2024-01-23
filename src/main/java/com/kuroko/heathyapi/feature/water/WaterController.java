@@ -5,26 +5,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@RestController("/water")
+@RestController
+@RequestMapping("/v1/water")
 public class WaterController {
     @Autowired
     private IWaterService waterService;
 
     @PostMapping("/water-intake")
-    public ResponseEntity<?> addWaterIntake(@RequestHeader("Authorization") String token,
+    public ResponseEntity<?> addWaterIntake(@RequestAttribute("email") String email,
             @RequestBody WaterDto waterDto) {
-        waterService.addWaterIntake(token, waterDto);
-        return ResponseEntity.ok().body("Water intake added successfully");
+        WaterDto water = waterService.addWaterIntake(email, waterDto);
+        return ResponseEntity.ok().body(water);
     }
 
     @DeleteMapping("/water-intake")
-    public ResponseEntity<?> deleteWaterIntake(@RequestHeader("Authorization") String token,
-            @RequestBody WaterDto waterDto) {
-        waterService.deleteWaterIntake(token, waterDto);
-        return ResponseEntity.ok().body("Water intake deleted successfully");
+    public ResponseEntity<?> deleteWaterIntake(@RequestAttribute("email") String email) {
+        WaterDto water = waterService.deleteWaterIntake(email);
+        return ResponseEntity.ok().body(water);
     }
 
 }

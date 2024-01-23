@@ -1,20 +1,20 @@
 package com.kuroko.heathyapi.feature.user;
 
-import com.kuroko.heathyapi.feature.account.payload.AuthResponse;
+import com.kuroko.heathyapi.feature.user.payload.Goal;
+import com.kuroko.heathyapi.feature.user.payload.GoalUpdatedDto;
 import com.kuroko.heathyapi.feature.user.payload.StatisticsDto;
+import com.kuroko.heathyapi.feature.user.payload.UserDto;
 import com.kuroko.heathyapi.feature.user.payload.UserReq;
-import com.kuroko.heathyapi.feature.user.payload.WeightDto;
+import com.kuroko.heathyapi.feature.weight.WeightDto;
 
 public interface IUserService {
 
     StatisticsDto getStatistics(int month, String token);
 
-    AuthResponse getCurrentUser(String token);
+    UserDto getCurrentUser(String email);
 
-    void updateUserInfo(String token, UserReq userReq);
+    UserDto updateUserInfo(String email, UserReq userReq);
 
-    void updateUserGoal(String token, String goal);
-
-    void addUserWeight(String token, WeightDto weightDto);
+    GoalUpdatedDto updateUserGoal(String email, Goal goal);
 
 }

@@ -22,6 +22,8 @@ public class JwtService {
 
     @Value("${app.jwt-secret}")
     private String secretKey;
+    @Value("${app.jwt-expiration-milliseconds}")
+    private long jwtExpiration;
 
     // in here, username is email
     public String extractUsername(String token) {
@@ -45,7 +47,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername()) // subject is email
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

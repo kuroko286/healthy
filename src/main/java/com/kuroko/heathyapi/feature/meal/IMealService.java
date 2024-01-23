@@ -1,16 +1,18 @@
 package com.kuroko.heathyapi.feature.meal;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
+import com.kuroko.heathyapi.feature.food.AddFoodDto;
+import com.kuroko.heathyapi.feature.food.UpdateFoodDto;
 import com.kuroko.heathyapi.feature.user.User;
 
 public interface IMealService {
-    List<Meal> getMealsByUserAndDate(User user, Date date);
+    List<Meal> getMealsByUserAndDate(User user, LocalDate date);
 
-    void addFoodIntake(String token, MealDto mealDto);
+    MealsPerDayDto addFoodIntake(String email, AddFoodDto addFoodDto);
 
-    void deleteFoodIntake(String token, MealDto mealDto);
+    MealsPerDayDto deleteFoodIntake(String email, MealType mealType);
 
-    void updateFoodIntake(String token, MealDto mealDto, Long id);
+    MealsPerDayDto updateFoodIntake(String email, UpdateFoodDto mealDto);
 }

@@ -1,5 +1,8 @@
 package com.kuroko.heathyapi.feature.user;
 
+import java.time.LocalDate;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,10 +10,17 @@ import com.kuroko.heathyapi.exception.business.ResourceNotFoundException;
 import com.kuroko.heathyapi.feature.account.Account;
 import com.kuroko.heathyapi.feature.account.AccountRepository;
 import com.kuroko.heathyapi.feature.account.payload.AuthResponse;
+import com.kuroko.heathyapi.feature.components.Nutrition;
+import com.kuroko.heathyapi.feature.meal.Meal;
+import com.kuroko.heathyapi.feature.meal.MealType;
+import com.kuroko.heathyapi.feature.user.payload.Goal;
+import com.kuroko.heathyapi.feature.user.payload.GoalUpdatedDto;
 import com.kuroko.heathyapi.feature.user.payload.StatisticsDto;
+import com.kuroko.heathyapi.feature.user.payload.UserDto;
 import com.kuroko.heathyapi.feature.user.payload.UserReq;
-import com.kuroko.heathyapi.feature.user.payload.WeightDto;
+import com.kuroko.heathyapi.feature.weight.WeightDto;
 import com.kuroko.heathyapi.service.JwtService;
+import com.kuroko.heathyapi.util.Patcher;
 
 @Service
 public class UserService implements IUserService {
@@ -20,50 +30,55 @@ public class UserService implements IUserService {
     private AccountRepository accountRepository;
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private Patcher patcher;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public StatisticsDto getStatistics(int month, String token) {
-        // TODO Auto-generated method stub
+        String email = jwtService.extractUsername(token);
+        Account account = accountRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Account with email " + email + " not found."));
+        User user = account.getUser();
+
         return null;
     }
 
     @Override
-    public AuthResponse getCurrentUser(String token) {
-        String email = jwtService.extractUsername(token);
+    public UserDto getCurrentUser(String email) {
         Account account = accountRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Account with email " + email + " not found."));
-        return new AuthResponse(token, account.getUser());
+        return new UserDto(account.getUser(), account);
     }
 
     @Override
-    public void updateUserInfo(String token, UserReq userReq) {
-        String email = jwtService.extractUsername(token);
-        Account account = accountRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Account with email " + email + " not found."));
-        User user = account.getUser();
-        // TODO: update user here
+    public UserDto updateUserInfo(String email, UserReq userReq) {
+        try {
+            Account account = accountRepository.findByEmail(email)
+                    .orElseThrow(() -> new ResourceNotFoundException("Account with email " + email + " not found."));
+            User user = account.getUser();
+            patcher.userPatcher(user, mapToUser(userReq));
+            userRepository.save(user);
+            return new UserDto(user, account);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
     @Override
-    public void updateUserGoal(String token, String goal) {
-        String email = jwtService.extractUsername(token);
+    public GoalUpdatedDto updateUserGoal(String email, Goal goal) {
         Account account = accountRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Account with email " + email + " not found."));
         User user = account.getUser();
-        // TODO: update user goal here
-        user.setGoal(goal);
+        user.setGoal(goal.getGoal());
         userRepository.save(user);
+        return new GoalUpdatedDto(goal.getGoal(), new Nutrition(user));
     }
 
-    @Override
-    public void addUserWeight(String token, WeightDto weightDto) {
-        String email = jwtService.extractUsername(token);
-        Account account = accountRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Account with email " + email + " not found."));
-        User user = account.getUser();
-        // TODO: Implement add user weight
-
+    public User mapToUser(UserReq userReq) {
+        return modelMapper.map(userReq, User.class);
     }
 
 }

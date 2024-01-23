@@ -8,7 +8,7 @@ import com.kuroko.heathyapi.feature.user.User;
 public interface IWaterService {
     List<Water> getWaterByUserAndCreatedAt(User user, Date date);
 
-    void addWaterIntake(String token, WaterDto waterDto);
+    WaterDto addWaterIntake(String email, WaterDto waterDto);
 
-    void deleteWaterIntake(String token, WaterDto waterDto);
+    WaterDto deleteWaterIntake(String email);
 }

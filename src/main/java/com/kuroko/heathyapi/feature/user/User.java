@@ -3,6 +3,7 @@ package com.kuroko.heathyapi.feature.user;
 import com.kuroko.heathyapi.feature.account.Account;
 import com.kuroko.heathyapi.feature.meal.Meal;
 import com.kuroko.heathyapi.feature.water.Water;
+import com.kuroko.heathyapi.feature.weight.Weight;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,6 +29,8 @@ public class User {
     @OneToMany(orphanRemoval = true, mappedBy = "user") // when remote water from this list, it also delele from db
     private List<Water> water;
     @OneToMany(orphanRemoval = true, mappedBy = "user")
-    private List<Meal> meal;
+    private List<Weight> weights;
+    @OneToMany(orphanRemoval = true, mappedBy = "user")
+    private List<Meal> meals;
 
 }

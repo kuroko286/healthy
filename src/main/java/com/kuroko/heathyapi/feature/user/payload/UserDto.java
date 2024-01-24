@@ -3,8 +3,8 @@ package com.kuroko.heathyapi.feature.user.payload;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import com.kuroko.heathyapi.components.Nutrition;
 import com.kuroko.heathyapi.feature.account.Account;
-import com.kuroko.heathyapi.feature.components.Nutrition;
 import com.kuroko.heathyapi.feature.meal.MealsPerDayDto;
 import com.kuroko.heathyapi.feature.user.User;
 import com.kuroko.heathyapi.feature.water.WaterDto;

@@ -3,13 +3,16 @@ package com.kuroko.heathyapi.feature.account;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kuroko.heathyapi.exception.business.ResourceAlreadyExistsException;
 import com.kuroko.heathyapi.exception.business.ResourceNotFoundException;
+import com.kuroko.heathyapi.exception.security.AuthenticationException;
 import com.kuroko.heathyapi.feature.account.payload.AuthResponse;
 import com.kuroko.heathyapi.feature.account.payload.LoginRequest;
 import com.kuroko.heathyapi.feature.account.payload.RegisterRequest;
@@ -21,6 +24,9 @@ import com.kuroko.heathyapi.service.JwtService;
 
 @Service
 public class AccountService implements IAccountService {
+
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
@@ -33,6 +39,8 @@ public class AccountService implements IAccountService {
     private JwtService jwtService;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public List<Account> getAllAccounts() {
@@ -106,9 +114,32 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public void updatePassword(Long id, String password) {
-        Account account = accountRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
-                "Account with id " + id + " not found"));
+    public void updatePassword(String email, String password) {
+        Account account = accountRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(
+                "Account with email " + email + " not found"));
+        account.setPassword(passwordEncoder.encode(password));
+        accountRepository.save(account);
+    }
+
+    @Override
+    public void forgotPassword(String email) {
+        Account account = accountRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(
+                "Account with email " + email + " not found"));
+        String token = jwtService.generateToken(new CustomUserDetails(account));
+        String link = frontendUrl + "/reset-password?token=" + token;
+
+        emailService.sendEmail(email, "Reset password", "Click here to reset your password: " + link);
+    }
+
+    @Override
+    public void resetPassword(String token, String password) {
+        String email = jwtService.extractUsername(token);
+        Account account = accountRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(
+                "Account with email " + email + " not found"));
+        UserDetails userDetails = new CustomUserDetails(account);
+        if (!jwtService.isTokenValid(token, userDetails)) {
+            throw new AuthenticationException("Invalid token");
+        }
         account.setPassword(passwordEncoder.encode(password));
         accountRepository.save(account);
     }

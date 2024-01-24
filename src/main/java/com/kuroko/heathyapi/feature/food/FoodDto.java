@@ -1,8 +1,6 @@
 package com.kuroko.heathyapi.feature.food;
 
-import java.util.Map;
-
-import com.kuroko.heathyapi.feature.components.Nutrition;
+import com.kuroko.heathyapi.components.Nutrition;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

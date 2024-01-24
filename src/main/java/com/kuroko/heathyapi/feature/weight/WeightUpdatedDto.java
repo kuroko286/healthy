@@ -1,6 +1,6 @@
 package com.kuroko.heathyapi.feature.weight;
 
-import com.kuroko.heathyapi.feature.components.Nutrition;
+import com.kuroko.heathyapi.components.Nutrition;
 import com.kuroko.heathyapi.feature.user.User;
 import com.kuroko.heathyapi.util.UserUtil;
 

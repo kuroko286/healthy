@@ -1,24 +1,18 @@
 package com.kuroko.heathyapi.feature.user;
 
-import java.time.LocalDate;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kuroko.heathyapi.components.Nutrition;
 import com.kuroko.heathyapi.exception.business.ResourceNotFoundException;
 import com.kuroko.heathyapi.feature.account.Account;
 import com.kuroko.heathyapi.feature.account.AccountRepository;
-import com.kuroko.heathyapi.feature.account.payload.AuthResponse;
-import com.kuroko.heathyapi.feature.components.Nutrition;
-import com.kuroko.heathyapi.feature.meal.Meal;
-import com.kuroko.heathyapi.feature.meal.MealType;
 import com.kuroko.heathyapi.feature.user.payload.Goal;
 import com.kuroko.heathyapi.feature.user.payload.GoalUpdatedDto;
 import com.kuroko.heathyapi.feature.user.payload.StatisticsDto;
 import com.kuroko.heathyapi.feature.user.payload.UserDto;
 import com.kuroko.heathyapi.feature.user.payload.UserReq;
-import com.kuroko.heathyapi.feature.weight.WeightDto;
 import com.kuroko.heathyapi.service.JwtService;
 import com.kuroko.heathyapi.util.Patcher;
 

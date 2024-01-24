@@ -19,5 +19,9 @@ public interface IAccountService {
 
     AuthResponse authenticate(LoginRequest loginRequest);
 
-    void updatePassword(Long id, String password);
+    void updatePassword(String email, String password);
+
+    void forgotPassword(String email);
+
+    void resetPassword(String token, String password);
 }

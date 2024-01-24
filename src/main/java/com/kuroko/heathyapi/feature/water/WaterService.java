@@ -12,15 +12,11 @@ import com.kuroko.heathyapi.exception.business.ResourceNotFoundException;
 import com.kuroko.heathyapi.feature.account.Account;
 import com.kuroko.heathyapi.feature.account.AccountRepository;
 import com.kuroko.heathyapi.feature.user.User;
-import com.kuroko.heathyapi.feature.user.UserRepository;
-import com.kuroko.heathyapi.service.JwtService;
 
 @Service
 public class WaterService implements IWaterService {
     @Autowired
     private WaterRepository waterRepository;
-    @Autowired
-    private UserRepository userRepository;
     @Autowired
     private AccountRepository accountRepository;
 

@@ -1,9 +1,5 @@
 package com.kuroko.heathyapi.feature.account.payload;
 
-import java.util.List;
-
-import com.kuroko.heathyapi.feature.account.Account;
-import com.kuroko.heathyapi.feature.meal.Meal;
 import com.kuroko.heathyapi.feature.user.User;
 import com.kuroko.heathyapi.feature.user.payload.UserDto;
 

@@ -1,6 +1,6 @@
 package com.kuroko.heathyapi.feature.user.payload;
 
-import com.kuroko.heathyapi.feature.components.Nutrition;
+import com.kuroko.heathyapi.components.Nutrition;
 
 import lombok.Data;
 

@@ -1,14 +1,9 @@
 package com.kuroko.heathyapi.feature.meal;
 
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
-import com.kuroko.heathyapi.feature.food.Food;
 import com.kuroko.heathyapi.feature.food.FoodDto;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.Data;
 
 @Data
@@ -19,10 +14,6 @@ public class MealDto {
     private double totalFat;
     private double totalCalories;
 
-    // @Enumerated(EnumType.STRING)
-    // private MealType type;
-    // private Date createdAt;
-    // private Date updatedAt;
     private List<FoodDto> foods;
 
     public MealDto(Meal meal) {

@@ -10,7 +10,6 @@ import com.kuroko.heathyapi.feature.account.Account;
 import com.kuroko.heathyapi.feature.account.AccountRepository;
 import com.kuroko.heathyapi.feature.user.User;
 import com.kuroko.heathyapi.feature.user.UserRepository;
-import com.kuroko.heathyapi.service.JwtService;
 
 @Service
 public class WeightService implements IWeightService {

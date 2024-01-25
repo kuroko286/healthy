@@ -1,6 +1,8 @@
 package com.kuroko.heathyapi.feature.weight;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,9 +29,16 @@ public class WeightService implements IWeightService {
         User user = account.getUser();
         user.setWeight(weightDto.getWeight());
         userRepository.save(user);
-        Weight weight = mapToWeight(weightDto);
-        weight.setUser(user);
-        weightRepository.save(weight);
+        Optional<Weight> optionalWeight = weightRepository.findByUserAndDate(LocalDate.now(), user);
+        if (optionalWeight.isPresent()) {
+            Weight weight = optionalWeight.get();
+            weight.setWeight(weightDto.getWeight());
+            weightRepository.save(weight);
+        } else {
+            Weight weight = mapToWeight(weightDto);
+            weight.setUser(user);
+            weightRepository.save(weight);
+        }
         return new WeightUpdatedDto(weightDto.getWeight(), user);
     }
 

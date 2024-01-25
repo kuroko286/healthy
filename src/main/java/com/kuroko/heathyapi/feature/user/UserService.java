@@ -59,9 +59,9 @@ public class UserService implements IUserService {
         LocalDate date = LocalDate.now();
         int year = date.getYear();
         int month = date.getMonthValue();
-        List<WaterPD> waterPerDay = waterRepository.findByYearAndMonthAndUser(year, month, user);
-        List<WeightPD> weightPerDay = weightRepository.findByYearAndMonthAndUser(year, month, user);
-        List<CaloriesPD> callPerDay = foodRepository.findByYearAndMonthAndUser(year, month, user);
+        List<Object[]> waterPerDay = waterRepository.findByYearAndMonthAndUser(year, month, user);
+        List<Object[]> weightPerDay = weightRepository.findByYearAndMonthAndUser(year, month, user);
+        List<Object[]> callPerDay = foodRepository.findByYearAndMonthAndUser(year, month, user);
         return new StatisticsDto(callPerDay, waterPerDay, weightPerDay);
     }
 

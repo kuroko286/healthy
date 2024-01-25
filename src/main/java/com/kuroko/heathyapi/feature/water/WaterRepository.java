@@ -23,6 +23,6 @@ public interface WaterRepository extends JpaRepository<Water, Long> {
                         @Param("endDate") LocalDateTime endDate);
 
         @Query("SELECT day(w.createdAt) as day, SUM(w.amount) as ml from Water w where w.user = :user and year(w.createdAt) = :year and month(w.createdAt) = :month group by day(w.createdAt)")
-        List<WaterPD> findByYearAndMonthAndUser(@Param("year") int year, @Param("month") int month,
+        List<Object[]> findByYearAndMonthAndUser(@Param("year") int year, @Param("month") int month,
                         @Param("user") User user);
 }

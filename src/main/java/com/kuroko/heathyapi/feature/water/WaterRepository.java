@@ -14,11 +14,15 @@ import com.kuroko.heathyapi.feature.user.User;
 import jakarta.transaction.Transactional;
 
 public interface WaterRepository extends JpaRepository<Water, Long> {
-    List<Water> findByUserAndCreatedAt(User user, Date date);
+        List<Water> findByUserAndCreatedAt(User user, Date date);
 
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM Water w WHERE w.user = :user AND w.createdAt between :startDate AND :endDate")
-    void deleteByUserAndCreatedAt(@Param("user") User user, @Param("startDate") LocalDateTime startDate,
-            @Param("endDate") LocalDateTime endDate);
+        @Transactional
+        @Modifying
+        @Query("DELETE FROM Water w WHERE w.user = :user AND w.createdAt between :startDate AND :endDate")
+        void deleteByUserAndCreatedAt(@Param("user") User user, @Param("startDate") LocalDateTime startDate,
+                        @Param("endDate") LocalDateTime endDate);
+
+        @Query("SELECT day(w.createdAt) as day, SUM(w.amount) as ml from Water w where w.user = :user and year(w.createdAt) = :year and month(w.createdAt) = :month group by day(w.createdAt)")
+        List<WaterPD> findByYearAndMonthAndUser(@Param("year") int year, @Param("month") int month,
+                        @Param("user") User user);
 }

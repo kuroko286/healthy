@@ -38,7 +38,6 @@ public class MealController {
     @DeleteMapping("/food-intake")
     public ResponseEntity<MealsPerDayDto> deleteFoodIntake(@RequestAttribute("email") String email,
             @RequestBody String mealType) {
-        System.out.println(mealType);
         Map<String, MealType> mealTypeMap = Map.of("breakfast", MealType.BREAKFAST, "lunch", MealType.LUNCH, "dinner",
                 MealType.DINNER, "snack", MealType.SNACK);
         MealsPerDayDto response = mealServicer.deleteFoodIntake(email, mealTypeMap.get(mealType));

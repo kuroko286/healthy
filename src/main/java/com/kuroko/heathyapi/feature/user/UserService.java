@@ -1,7 +1,9 @@
 package com.kuroko.heathyapi.feature.user;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,18 +53,32 @@ public class UserService implements IUserService {
         Account account = accountRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Account with email " + email + " not found."));
         User user = account.getUser();
-
-        return getStatisticsCurrentMonth(user);
+        LocalDate today = LocalDate.now();
+        if (today.getMonthValue() == month) { // get current month
+            return getStatisticsMonth(user, today.getMonthValue(), today.getYear());
+        }
+        today = today.minusMonths(1);
+        if (today.getMonthValue() == month) { // get last month
+            return getStatisticsMonth(user, today.getMonthValue(), today.getYear());
+        } else {
+            throw new InvalidParameterException("Only support current or previous month");
+        }
     }
 
-    public StatisticsDto getStatisticsCurrentMonth(User user) {
-        LocalDate date = LocalDate.now();
-        int year = date.getYear();
-        int month = date.getMonthValue();
+    public StatisticsDto getStatisticsMonth(User user, int month, int year) {
+
         List<Object[]> waterPerDay = waterRepository.findByYearAndMonthAndUser(year, month, user);
+        List<WaterPD> waterPerDayList = waterPerDay.stream()
+                .map(water -> new WaterPD((int) water[0], (Double) water[1])).collect(Collectors.toList());
+
         List<Object[]> weightPerDay = weightRepository.findByYearAndMonthAndUser(year, month, user);
+        List<WeightPD> weightPerDayList = weightPerDay.stream()
+                .map(weight -> new WeightPD((int) weight[0], (Double) weight[1])).collect(Collectors.toList());
+
         List<Object[]> callPerDay = foodRepository.findByYearAndMonthAndUser(year, month, user);
-        return new StatisticsDto(callPerDay, waterPerDay, weightPerDay);
+        List<CaloriesPD> callPerDayList = callPerDay.stream()
+                .map(call -> new CaloriesPD((int) call[0], (Double) call[1])).collect(Collectors.toList());
+        return new StatisticsDto(callPerDayList, waterPerDayList, weightPerDayList);
     }
 
     @Override

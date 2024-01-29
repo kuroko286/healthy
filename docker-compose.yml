@@ -1,0 +1,33 @@
+version: '3'
+services:
+  mysqldb:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 2862003(())aa
+      MYSQL_DATABASE: healthy
+      MYSQL_USER: kuroko
+      MYSQL_PASSWORD: 2862003
+    ports:
+      - 3307:3306 # host port: container port
+    networks:
+      - healthy
+    volumes:
+      - mysqldata:/var/lib/mysql  # persist container data
+
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    networks:
+      - healthy
+    volumes:
+      - .:/app  # mounting a volume to hot reload container to source code 
+    depends_on:
+      - mysqldb
+
+networks:
+  healthy:  # create common network between spring app and mysqldb
+volumes:
+  mysqldata:

@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class DemoController {
     @GetMapping
     public ResponseEntity<String> demo() {
-        return ResponseEntity.ok("Hello from secured endpoint");
+        return ResponseEntity.ok("Hello from secured endpoint change xcaASDAS");
     }
 }

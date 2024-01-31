@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MealsPerDayDto {
 
-        private double comsumedCaloriesPerDay;
+        private double totalConsumedCaloriesPerDay;
         private double totalConsumedCarbohydratesPerDay;
         private double totalConsumedFatPerDay;
         private double totalConsumedProteinPerDay;
@@ -42,7 +42,7 @@ public class MealsPerDayDto {
                 this.totalConsumedProteinPerDay = this.breakfast.getTotalProtein() +
                                 this.lunch.getTotalProtein()
                                 + this.dinner.getTotalProtein() + this.snack.getTotalProtein();
-                this.comsumedCaloriesPerDay = this.breakfast.getTotalCalories() +
+                this.totalConsumedCaloriesPerDay = this.breakfast.getTotalCalories() +
                                 this.lunch.getTotalCalories()
                                 + this.dinner.getTotalCalories() + this.snack.getTotalCalories();
         }

@@ -85,6 +85,7 @@ public class UserService implements IUserService {
     public UserDto getCurrentUser(String email) {
         Account account = accountRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Account with email " + email + " not found."));
+        // System.out.println(account.getUser().getAvatarURL());
         return new UserDto(account.getUser(), account);
     }
 
@@ -96,6 +97,8 @@ public class UserService implements IUserService {
             User user = account.getUser();
             patcher.userPatcher(user, mapToUser(userReq));
             userRepository.save(user);
+            // account.setUser(user);
+            // accountRepository.save(account);
             return new UserDto(user, account);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);

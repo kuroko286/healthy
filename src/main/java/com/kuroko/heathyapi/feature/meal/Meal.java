@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import com.kuroko.heathyapi.feature.food.Food;
 import com.kuroko.heathyapi.feature.user.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -33,7 +34,7 @@ public class Meal {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-    @OneToMany(orphanRemoval = true, mappedBy = "meal")
+    @OneToMany(orphanRemoval = true, mappedBy = "meal", cascade = CascadeType.REMOVE)
     private List<Food> foods;
 
     public Meal() {

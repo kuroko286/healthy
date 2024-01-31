@@ -2,6 +2,7 @@ package com.kuroko.heathyapi.feature.account;
 
 import com.kuroko.heathyapi.feature.user.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,6 +22,6 @@ public class Account {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
-    @OneToOne(mappedBy = "account")
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
     private User user;
 }

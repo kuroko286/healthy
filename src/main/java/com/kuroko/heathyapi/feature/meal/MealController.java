@@ -32,7 +32,7 @@ public class MealController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PutMapping("/food-intake/:foodId")
+    @PutMapping("/food-intake/{foodId}")
     public ResponseEntity<MealsPerDayDto> updateFoodIntake(@RequestAttribute("email") String email,
             @PathVariable Long foodId,
             @RequestBody FoodIntakeData mealDto) {
@@ -45,6 +45,7 @@ public class MealController {
             @RequestBody String mealType) {
         Map<String, MealType> mealTypeMap = Map.of("breakfast", MealType.BREAKFAST, "lunch", MealType.LUNCH, "dinner",
                 MealType.DINNER, "snack", MealType.SNACK);
+        // System.out.println(mealType);
         MealsPerDayDto response = mealServicer.deleteFoodIntake(email, mealTypeMap.get(mealType));
         return ResponseEntity.ok().body(response);
     }

@@ -58,8 +58,11 @@ public class MealService implements IMealService {
         Meal meal = mealRepository.findByUserAndDateRangeAndType(user, LocalDate.now().atStartOfDay(),
                 LocalDate.now().atStartOfDay().plusDays(1), mealType).orElseThrow(
                         () -> new ResourceNotFoundException("Meal with mealType " + mealType + " not found."));
-        meal.getFoods().clear();
-        mealRepository.save(meal);
+        // System.out.println(meal.getFoods().size());
+        foodRepository.deleteAll(meal.getFoods());
+
+        // Meal m = mealRepository.save(meal);
+        // System.out.println(m.getFoods().size());
         return new MealsPerDayDto(getMealsByUserAndDate(user, LocalDate.now()));
     }
 

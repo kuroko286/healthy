@@ -40,7 +40,7 @@ public class UserDto {
             this.email = account.getEmail();
             this.goal = user.getGoal();
             this.gender = user.getGender();
-            this.avatarURL = Boolean.parseBoolean(user.getAvatarURL()) ? user.getAvatarURL() : "";
+            this.avatarURL = user.getAvatarURL() == null ? "" : user.getAvatarURL();
             this.age = user.getAge();
             this.height = user.getHeight();
             this.coefficientOfActivity = user.getCoefficientOfActivity();
@@ -61,6 +61,7 @@ public class UserDto {
         if (user.getMeals() == null) {
             this.consumedMealsByDay = null;
         } else {
+
             this.consumedMealsByDay = new MealsPerDayDto(
                     user.getMeals().stream().filter(m -> m.getCreatedAt().toLocalDate().equals(LocalDate.now()))
                             .toList());

@@ -27,11 +27,12 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
-    @OneToMany(orphanRemoval = true, mappedBy = "user") // when remote water from this list, it also delele from db
+    @OneToMany(orphanRemoval = true, mappedBy = "user", cascade = CascadeType.ALL) // when remote water from this list,
+                                                                                   // it also delele from db
     private List<Water> water;
-    @OneToMany(orphanRemoval = true, mappedBy = "user")
+    @OneToMany(orphanRemoval = true, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Weight> weights;
-    @OneToMany(orphanRemoval = true, mappedBy = "user")
+    @OneToMany(orphanRemoval = true, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Meal> meals;
     @OneToMany(mappedBy = "user")
     private List<Message> messages;

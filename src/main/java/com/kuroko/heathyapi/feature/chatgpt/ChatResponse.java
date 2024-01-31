@@ -8,14 +8,12 @@ import lombok.Data;
 public class ChatResponse {
     private List<Choice> choices;
 
-    // constructors, getters and setters
-
     public static class Choice {
 
         private int index;
-        private Message message;
+        private MessageDto message;
 
-        public Choice(int index, Message message) {
+        public Choice(int index, MessageDto message) {
             this.index = index;
             this.message = message;
         }
@@ -28,14 +26,12 @@ public class ChatResponse {
             this.index = index;
         }
 
-        public Message getMessage() {
+        public MessageDto getMessage() {
             return message;
         }
 
-        public void setMessage(Message message) {
+        public void setMessage(MessageDto message) {
             this.message = message;
         }
-
-        // constructors, getters and setters
     }
 }

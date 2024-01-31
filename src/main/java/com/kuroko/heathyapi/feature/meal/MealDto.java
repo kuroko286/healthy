@@ -1,5 +1,6 @@
 package com.kuroko.heathyapi.feature.meal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.kuroko.heathyapi.feature.food.FoodDto;
@@ -29,7 +30,7 @@ public class MealDto {
     }
 
     public MealDto() {
-        this.foods = List.of();
+        this.foods = new ArrayList<>();
     }
 
 }

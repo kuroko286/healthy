@@ -11,6 +11,7 @@ import com.kuroko.heathyapi.feature.account.AccountRepository;
 import com.kuroko.heathyapi.feature.food.AddFoodDto;
 import com.kuroko.heathyapi.feature.food.Food;
 import com.kuroko.heathyapi.feature.food.FoodDto;
+import com.kuroko.heathyapi.feature.food.FoodIntakeData;
 import com.kuroko.heathyapi.feature.food.FoodRepository;
 import com.kuroko.heathyapi.feature.food.UpdateFoodDto;
 import com.kuroko.heathyapi.feature.user.User;
@@ -63,18 +64,17 @@ public class MealService implements IMealService {
     }
 
     @Override
-    public MealsPerDayDto updateFoodIntake(String email, UpdateFoodDto updateFoodDto) {
+    public MealsPerDayDto updateFoodIntake(String email, long foodId, FoodIntakeData updateFoodDto) {
 
         Account account = accountRepository.findByEmail(email).orElseThrow(
                 () -> new ResourceNotFoundException("Account with email " + email + " not found."));
         User user = account.getUser();
 
-        long foodId = updateFoodDto.getFoodId();
         Food food = foodRepository.findById(foodId).orElseThrow(
                 () -> new ResourceNotFoundException("Food with id " + foodId + " not found."));
-        food.setName(updateFoodDto.getFoodIntakeData().getFoodDetails().getName());
-        food.setCalories(updateFoodDto.getFoodIntakeData().getFoodDetails().getCalories());
-        food.setNutrition(updateFoodDto.getFoodIntakeData().getFoodDetails().getNutrition());
+        food.setName(updateFoodDto.getFoodDetails().getName());
+        food.setCalories(updateFoodDto.getFoodDetails().getCalories());
+        food.setNutrition(updateFoodDto.getFoodDetails().getNutrition());
         foodRepository.save(food);
         return new MealsPerDayDto(getMealsByUserAndDate(user, LocalDate.now()));
     }

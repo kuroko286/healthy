@@ -4,7 +4,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -13,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kuroko.heathyapi.feature.food.AddFoodDto;
+import com.kuroko.heathyapi.feature.food.FoodIntakeData;
 import com.kuroko.heathyapi.feature.food.UpdateFoodDto;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 @RequestMapping("/v1/meals")
 public class MealController {
     @Autowired
@@ -28,10 +32,11 @@ public class MealController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PutMapping("/food-intake")
+    @PutMapping("/food-intake/:foodId")
     public ResponseEntity<MealsPerDayDto> updateFoodIntake(@RequestAttribute("email") String email,
-            @RequestBody UpdateFoodDto mealDto) {
-        MealsPerDayDto response = mealServicer.updateFoodIntake(email, mealDto);
+            @PathVariable Long foodId,
+            @RequestBody FoodIntakeData mealDto) {
+        MealsPerDayDto response = mealServicer.updateFoodIntake(email, foodId, mealDto);
         return ResponseEntity.ok().body(response);
     }
 

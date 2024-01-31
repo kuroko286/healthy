@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class ChatRequest {
     private String model;
-    private List<Message> messages;
+    private List<MessageDto> messages;
     // private int n;
     // private double temperature;
 
@@ -16,7 +16,7 @@ public class ChatRequest {
         this.model = model;
 
         this.messages = new ArrayList<>();
-        this.messages.add(new Message("user", prompt));
+        this.messages.add(new MessageDto("user", prompt));
     }
 
 }

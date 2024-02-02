@@ -40,20 +40,22 @@ public class ChatController {
     private String apiUrl;
 
     @GetMapping("/v1/messages")
-    public ResponseEntity<List<Message>> getMessages(@RequestAttribute("email") String email) {
+    public ResponseEntity<List<ChatMessage>> getMessages(@RequestAttribute("email") String email) {
         return ResponseEntity.ok(messageService.getAllMessages(email));
     }
 
     @MessageMapping("/chatgpt")
     public String chat(@Payload Prompt prompt) {
-        // create message from prompt
+        // create ChatMessage from prompt
         String email = prompt.getEmail();
         Account account = accountRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Account with email " + email + " not found."));
         User user = account.getUser();
-        Message quest = Message.builder().role(Role.USER).content(prompt.getText()).user(user).build();
+        ChatMessage quest = ChatMessage.builder().role(Role.USER).content(prompt.getText()).user(user).build();
         messageService.createMessage(quest);
-        messagingTemplate.convertAndSendToUser(email, "/user/private", quest);
+        System.out.println("Before 1 send");
+        messagingTemplate.convertAndSendToUser(email, "/private", quest);
+        System.err.println("After 1 send");
         // create a request
         ChatRequest request = new ChatRequest(model, prompt.getText());
 
@@ -67,11 +69,12 @@ public class ChatController {
             // get the first response
             res = response.getChoices().get(0).getMessage().getContent();
         }
-        Message answer = Message.builder().role(Role.ASSISTANT).content(res).user(user).build();
+        ChatMessage answer = ChatMessage.builder().role(Role.ASSISTANT).content(res).user(user).build();
         messageService.createMessage(answer);
-        messagingTemplate.convertAndSendToUser(email, "/user/private", answer);
-
-        return "Sended message";
+        System.out.println("Before 2 send");
+        messagingTemplate.convertAndSendToUser(email, "/private", answer);
+        System.out.println("After 2 send");
+        return "Sended ChatMessage";
 
     }
 }

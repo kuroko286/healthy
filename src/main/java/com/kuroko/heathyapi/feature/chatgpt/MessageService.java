@@ -18,12 +18,12 @@ public class MessageService implements IMessageService {
     private AccountRepository accountRepository;
 
     @Override
-    public void createMessage(Message quest) {
+    public void createMessage(ChatMessage quest) {
         messageRepository.save(quest);
     }
 
     @Override
-    public List<Message> getAllMessages(String email) {
+    public List<ChatMessage> getAllMessages(String email) {
         Account account = accountRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(
                 "Account with email " + email + " not found."));
         User user = account.getUser();

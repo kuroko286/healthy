@@ -6,8 +6,8 @@ import com.kuroko.heathyapi.feature.user.User;
 
 public interface IMessageService {
 
-    void createMessage(Message quest);
+    void createMessage(ChatMessage quest);
 
-    List<Message> getAllMessages(String email);
+    List<ChatMessage> getAllMessages(String email);
 
 }

@@ -1,5 +1,6 @@
 package com.kuroko.heathyapi.feature.chatgpt;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kuroko.heathyapi.feature.user.User;
 
 import jakarta.persistence.Entity;
@@ -15,19 +16,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Message {
+@Entity
+public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Enumerated(EnumType.STRING)
     private Role role;
     private String content;
-
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 }

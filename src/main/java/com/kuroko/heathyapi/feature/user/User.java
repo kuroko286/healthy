@@ -1,7 +1,7 @@
 package com.kuroko.heathyapi.feature.user;
 
 import com.kuroko.heathyapi.feature.account.Account;
-import com.kuroko.heathyapi.feature.chatgpt.Message;
+import com.kuroko.heathyapi.feature.chatgpt.ChatMessage;
 import com.kuroko.heathyapi.feature.meal.Meal;
 import com.kuroko.heathyapi.feature.water.Water;
 import com.kuroko.heathyapi.feature.weight.Weight;
@@ -34,7 +34,7 @@ public class User {
     private List<Weight> weights;
     @OneToMany(orphanRemoval = true, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Meal> meals;
-    @OneToMany(mappedBy = "user")
-    private List<Message> messages;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ChatMessage> messages;
 
 }

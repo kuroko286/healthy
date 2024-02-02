@@ -27,9 +27,10 @@ public class SecurityConfig {
                 http.cors(Customizer.withDefaults()).csrf(csrf -> csrf.disable())
                                 .authorizeHttpRequests(
                                                 (authorize) -> authorize.requestMatchers("/v1/auth/**").permitAll() // allow
-                                                                                                                    // login
-                                                                                                                    // and
-                                                                                                                    // register
+                                                                .requestMatchers("/chatgpt/**").permitAll() // login
+                                                                                                            // and
+                                                                                                            // register,
+                                                                                                            // websocket
                                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(
                                                 SessionCreationPolicy.STATELESS))

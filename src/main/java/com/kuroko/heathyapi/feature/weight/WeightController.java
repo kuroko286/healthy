@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kuroko.heathyapi.feature.weight.dto.WeightDto;
+import com.kuroko.heathyapi.feature.weight.dto.WeightUpdatedDto;
+import com.kuroko.heathyapi.feature.weight.service.WeightService;
+
 @RestController
 @RequestMapping("/v1/weight")
 @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)

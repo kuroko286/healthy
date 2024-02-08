@@ -11,9 +11,6 @@ public class LoginRequest {
     @Pattern(regexp = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$", message = "Invalid email")
     private String email;
     @NotEmpty(message = "Password may not be empty")
-    // @Pattern(regexp =
-    // "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
-    // message = "Invalid password")
     @Size(min = 8, message = "Password must be at least 8 characters")
     @Size(max = 20, message = "Password must not exceed 24 characters")
     private String password;

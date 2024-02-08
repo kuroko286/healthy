@@ -16,9 +16,15 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.client.RestTemplate;
 
 import com.kuroko.heathyapi.exception.business.ResourceNotFoundException;
-import com.kuroko.heathyapi.feature.account.Account;
 import com.kuroko.heathyapi.feature.account.AccountRepository;
-import com.kuroko.heathyapi.feature.user.User;
+import com.kuroko.heathyapi.feature.account.model.Account;
+import com.kuroko.heathyapi.feature.chatgpt.dto.ChatRequest;
+import com.kuroko.heathyapi.feature.chatgpt.dto.ChatResponse;
+import com.kuroko.heathyapi.feature.chatgpt.dto.Prompt;
+import com.kuroko.heathyapi.feature.chatgpt.model.ChatMessage;
+import com.kuroko.heathyapi.feature.chatgpt.model.Role;
+import com.kuroko.heathyapi.feature.chatgpt.service.IMessageService;
+import com.kuroko.heathyapi.feature.user.model.User;
 
 @Controller
 @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
@@ -52,10 +58,18 @@ public class ChatController {
                 .orElseThrow(() -> new ResourceNotFoundException("Account with email " + email + " not found."));
         User user = account.getUser();
         ChatMessage quest = ChatMessage.builder().role(Role.USER).content(prompt.getText()).user(user).build();
-        messageService.createMessage(quest);
-        System.out.println("Before 1 send");
-        messagingTemplate.convertAndSendToUser(email, "/private", quest);
-        System.err.println("After 1 send");
+        ChatMessage savedQuest = messageService.createMessage(quest);
+
+        messagingTemplate.convertAndSendToUser(email, "/private", savedQuest);
+
+        String res = promptToChatGpt(prompt);
+        ChatMessage answer = ChatMessage.builder().role(Role.ASSISTANT).content(res).user(user).build();
+        ChatMessage savedAnswer = messageService.createMessage(answer);
+        messagingTemplate.convertAndSendToUser(email, "/private", savedAnswer);
+        return "Sended ChatMessage";
+    }
+
+    public String promptToChatGpt(Prompt prompt) {
         // create a request
         ChatRequest request = new ChatRequest(model, prompt.getText());
 
@@ -69,12 +83,6 @@ public class ChatController {
             // get the first response
             res = response.getChoices().get(0).getMessage().getContent();
         }
-        ChatMessage answer = ChatMessage.builder().role(Role.ASSISTANT).content(res).user(user).build();
-        messageService.createMessage(answer);
-        System.out.println("Before 2 send");
-        messagingTemplate.convertAndSendToUser(email, "/private", answer);
-        System.out.println("After 2 send");
-        return "Sended ChatMessage";
-
+        return res;
     }
 }

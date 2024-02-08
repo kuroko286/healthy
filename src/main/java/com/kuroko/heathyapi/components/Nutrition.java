@@ -1,6 +1,6 @@
 package com.kuroko.heathyapi.components;
 
-import com.kuroko.heathyapi.feature.user.User;
+import com.kuroko.heathyapi.feature.user.model.User;
 import com.kuroko.heathyapi.util.UserUtil;
 
 import jakarta.persistence.Embeddable;

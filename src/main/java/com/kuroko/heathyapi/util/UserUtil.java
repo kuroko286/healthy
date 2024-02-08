@@ -2,7 +2,7 @@ package com.kuroko.heathyapi.util;
 
 import org.springframework.stereotype.Component;
 
-import com.kuroko.heathyapi.feature.user.User;
+import com.kuroko.heathyapi.feature.user.model.User;
 
 @Component
 public class UserUtil {

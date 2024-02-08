@@ -5,10 +5,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import com.kuroko.heathyapi.components.CustomUserDetails;
 import com.kuroko.heathyapi.exception.business.ResourceNotFoundException;
-import com.kuroko.heathyapi.feature.account.Account;
 import com.kuroko.heathyapi.feature.account.AccountRepository;
-import com.kuroko.heathyapi.feature.account.CustomUserDetails;
+import com.kuroko.heathyapi.feature.account.model.Account;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -18,16 +18,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) {
-        try {
-            Account account = accountRepository.findByEmail(email)
-                    .orElseThrow(
-                            () -> new ResourceNotFoundException("Account with email " + email + " not found"));
+        Account account = accountRepository.findByEmail(email)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Account with email " + email + " not found"));
+        return new CustomUserDetails(account);
 
-            return new CustomUserDetails(account);
-        } catch (ResourceNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
 }

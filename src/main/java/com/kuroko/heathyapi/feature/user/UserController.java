@@ -20,6 +20,7 @@ import com.kuroko.heathyapi.feature.user.payload.GoalUpdatedDto;
 import com.kuroko.heathyapi.feature.user.payload.StatisticsDto;
 import com.kuroko.heathyapi.feature.user.payload.UserDto;
 import com.kuroko.heathyapi.feature.user.payload.UserReq;
+import com.kuroko.heathyapi.feature.user.service.IUserService;
 
 @RestController
 @RequestMapping("/v1/users")

@@ -5,7 +5,7 @@ import java.time.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.kuroko.heathyapi.feature.user.User;
+import com.kuroko.heathyapi.feature.user.model.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

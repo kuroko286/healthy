@@ -2,9 +2,9 @@ package com.kuroko.heathyapi.feature.user.payload;
 
 import java.util.List;
 
-import com.kuroko.heathyapi.feature.food.CaloriesPD;
-import com.kuroko.heathyapi.feature.water.WaterPD;
-import com.kuroko.heathyapi.feature.weight.WeightPD;
+import com.kuroko.heathyapi.feature.food.dto.CaloriesPD;
+import com.kuroko.heathyapi.feature.water.dto.WaterPD;
+import com.kuroko.heathyapi.feature.weight.dto.WeightPD;
 
 import lombok.Data;
 

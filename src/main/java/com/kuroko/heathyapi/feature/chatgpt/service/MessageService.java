@@ -1,0 +1,36 @@
+package com.kuroko.heathyapi.feature.chatgpt.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+
+import com.kuroko.heathyapi.exception.business.ResourceNotFoundException;
+import com.kuroko.heathyapi.feature.account.AccountRepository;
+import com.kuroko.heathyapi.feature.account.model.Account;
+import com.kuroko.heathyapi.feature.chatgpt.MessageRepository;
+import com.kuroko.heathyapi.feature.chatgpt.model.ChatMessage;
+import com.kuroko.heathyapi.feature.user.model.User;
+
+@Service
+public class MessageService implements IMessageService {
+    @Autowired
+    private MessageRepository messageRepository;
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Override
+    public ChatMessage createMessage(@NonNull ChatMessage quest) {
+        return messageRepository.save(quest);
+    }
+
+    @Override
+    public List<ChatMessage> getAllMessages(String email) {
+        Account account = accountRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(
+                "Account with email " + email + " not found."));
+        User user = account.getUser();
+        return messageRepository.findByUser(user);
+    }
+
+}

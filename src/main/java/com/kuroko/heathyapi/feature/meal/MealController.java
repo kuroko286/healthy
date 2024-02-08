@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kuroko.heathyapi.feature.food.AddFoodDto;
-import com.kuroko.heathyapi.feature.food.FoodIntakeData;
-import com.kuroko.heathyapi.feature.food.UpdateFoodDto;
+import com.kuroko.heathyapi.feature.food.dto.AddFoodDto;
+import com.kuroko.heathyapi.feature.food.dto.FoodIntakeData;
+import com.kuroko.heathyapi.feature.food.dto.UpdateFoodDto;
+import com.kuroko.heathyapi.feature.meal.dto.MealsPerDayDto;
+import com.kuroko.heathyapi.feature.meal.model.MealType;
+import com.kuroko.heathyapi.feature.meal.service.IMealService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
@@ -45,7 +48,6 @@ public class MealController {
             @RequestBody String mealType) {
         Map<String, MealType> mealTypeMap = Map.of("breakfast", MealType.BREAKFAST, "lunch", MealType.LUNCH, "dinner",
                 MealType.DINNER, "snack", MealType.SNACK);
-        // System.out.println(mealType);
         MealsPerDayDto response = mealServicer.deleteFoodIntake(email, mealTypeMap.get(mealType));
         return ResponseEntity.ok().body(response);
     }

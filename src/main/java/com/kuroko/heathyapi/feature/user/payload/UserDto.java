@@ -5,10 +5,10 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kuroko.heathyapi.components.Nutrition;
-import com.kuroko.heathyapi.feature.account.Account;
-import com.kuroko.heathyapi.feature.meal.MealsPerDayDto;
-import com.kuroko.heathyapi.feature.user.User;
-import com.kuroko.heathyapi.feature.water.WaterDto;
+import com.kuroko.heathyapi.feature.account.model.Account;
+import com.kuroko.heathyapi.feature.meal.dto.MealsPerDayDto;
+import com.kuroko.heathyapi.feature.user.model.User;
+import com.kuroko.heathyapi.feature.water.dto.WaterDto;
 import com.kuroko.heathyapi.util.UserUtil;
 
 import lombok.Data;

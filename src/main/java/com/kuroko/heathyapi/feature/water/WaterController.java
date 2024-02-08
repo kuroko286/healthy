@@ -1,6 +1,10 @@
 package com.kuroko.heathyapi.feature.water;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import com.kuroko.heathyapi.feature.water.dto.WaterDto;
+import com.kuroko.heathyapi.feature.water.service.IWaterService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,14 +22,14 @@ public class WaterController {
     private IWaterService waterService;
 
     @PostMapping("/water-intake")
-    public ResponseEntity<?> addWaterIntake(@RequestAttribute("email") String email,
+    public ResponseEntity<WaterDto> addWaterIntake(@RequestAttribute("email") String email,
             @RequestBody WaterDto waterDto) {
         WaterDto water = waterService.addWaterIntake(email, waterDto);
         return ResponseEntity.ok().body(water);
     }
 
     @DeleteMapping("/water-intake")
-    public ResponseEntity<?> deleteWaterIntake(@RequestAttribute("email") String email) {
+    public ResponseEntity<WaterDto> deleteWaterIntake(@RequestAttribute("email") String email) {
         WaterDto water = waterService.deleteWaterIntake(email);
         return ResponseEntity.ok().body(water);
     }

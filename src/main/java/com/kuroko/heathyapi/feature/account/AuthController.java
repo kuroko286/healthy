@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kuroko.heathyapi.feature.account.payload.AuthResponse;
 import com.kuroko.heathyapi.feature.account.payload.LoginRequest;
 import com.kuroko.heathyapi.feature.account.payload.RegisterRequest;
-import com.kuroko.heathyapi.feature.account.service.IAccountService;
+import com.kuroko.heathyapi.feature.account.service.AccountService;
 
 import jakarta.validation.Valid;
 
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 public class AuthController {
     @Autowired
-    private IAccountService accountService;
+    private AccountService accountService;
 
     @PostMapping("/signin")
     public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest loginRequest) {

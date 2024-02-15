@@ -16,17 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kuroko.heathyapi.feature.food.dto.AddFoodDto;
 import com.kuroko.heathyapi.feature.food.dto.FoodIntakeData;
-import com.kuroko.heathyapi.feature.food.dto.UpdateFoodDto;
 import com.kuroko.heathyapi.feature.meal.dto.MealsPerDayDto;
 import com.kuroko.heathyapi.feature.meal.model.MealType;
-import com.kuroko.heathyapi.feature.meal.service.IMealService;
+import com.kuroko.heathyapi.feature.meal.service.MealService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 @RequestMapping("/v1/meals")
 public class MealController {
     @Autowired
-    private IMealService mealServicer;
+    private MealService mealServicer;
 
     @PostMapping("/food-intake")
     public ResponseEntity<MealsPerDayDto> addFoodIntake(@RequestAttribute("email") String email,

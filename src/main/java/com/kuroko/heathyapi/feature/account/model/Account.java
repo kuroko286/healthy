@@ -29,4 +29,5 @@ public class Account {
     private Role role;
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
     private User user;
+
 }

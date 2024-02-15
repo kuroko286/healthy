@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -20,14 +19,14 @@ import com.kuroko.heathyapi.feature.user.payload.GoalUpdatedDto;
 import com.kuroko.heathyapi.feature.user.payload.StatisticsDto;
 import com.kuroko.heathyapi.feature.user.payload.UserDto;
 import com.kuroko.heathyapi.feature.user.payload.UserReq;
-import com.kuroko.heathyapi.feature.user.service.IUserService;
+import com.kuroko.heathyapi.feature.user.service.UserService;
 
 @RestController
 @RequestMapping("/v1/users")
 @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 public class UserController {
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @GetMapping("/statistics")
     public ResponseEntity<StatisticsDto> getStatistics(@RequestParam int month,

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kuroko.heathyapi.feature.weight.dto.WeightDto;
 import com.kuroko.heathyapi.feature.weight.dto.WeightUpdatedDto;
-import com.kuroko.heathyapi.feature.weight.service.WeightService;
+import com.kuroko.heathyapi.feature.weight.service.WeightServiceImpl;
 
 @RestController
 @RequestMapping("/v1/weight")
@@ -19,7 +19,7 @@ import com.kuroko.heathyapi.feature.weight.service.WeightService;
 public class WeightController {
 
     @Autowired
-    private WeightService weightService;
+    private WeightServiceImpl weightService;
 
     @PostMapping
     public ResponseEntity<WeightUpdatedDto> create(@RequestAttribute("email") String email,

@@ -29,12 +29,12 @@ public class User {
     private Account account;
     @OneToMany(orphanRemoval = true, mappedBy = "user", cascade = CascadeType.ALL) // when remote water from this list,
                                                                                    // it also delele from db
-    private List<Water> water;
+    private List<Water> water = new ArrayList<>();
     @OneToMany(orphanRemoval = true, mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Weight> weights;
+    private List<Weight> weights = new ArrayList<>();
     @OneToMany(orphanRemoval = true, mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Meal> meals;
+    private List<Meal> meals = new ArrayList<>();
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<ChatMessage> messages;
+    private List<ChatMessage> messages = new ArrayList<>();
 
 }

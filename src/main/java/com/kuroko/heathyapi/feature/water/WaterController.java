@@ -3,7 +3,7 @@ package com.kuroko.heathyapi.feature.water;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kuroko.heathyapi.feature.water.dto.WaterDto;
-import com.kuroko.heathyapi.feature.water.service.IWaterService;
+import com.kuroko.heathyapi.feature.water.service.WaterService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 public class WaterController {
     @Autowired
-    private IWaterService waterService;
+    private WaterService waterService;
 
     @PostMapping("/water-intake")
     public ResponseEntity<WaterDto> addWaterIntake(@RequestAttribute("email") String email,

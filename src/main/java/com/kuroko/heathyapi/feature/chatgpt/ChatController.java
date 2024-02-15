@@ -23,7 +23,7 @@ import com.kuroko.heathyapi.feature.chatgpt.dto.ChatResponse;
 import com.kuroko.heathyapi.feature.chatgpt.dto.Prompt;
 import com.kuroko.heathyapi.feature.chatgpt.model.ChatMessage;
 import com.kuroko.heathyapi.feature.chatgpt.model.Role;
-import com.kuroko.heathyapi.feature.chatgpt.service.IMessageService;
+import com.kuroko.heathyapi.feature.chatgpt.service.MessageService;
 import com.kuroko.heathyapi.feature.user.model.User;
 
 @Controller
@@ -33,7 +33,7 @@ public class ChatController {
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
-    private IMessageService messageService;
+    private MessageService messageService;
     @Autowired
     private AccountRepository accountRepository;
     @Autowired

@@ -8,6 +8,7 @@ import com.kuroko.heathyapi.feature.account.model.Account;
 import com.kuroko.heathyapi.feature.account.model.Role;
 import com.kuroko.heathyapi.feature.account.payload.RegisterRequest;
 import com.kuroko.heathyapi.feature.user.model.User;
+import com.kuroko.heathyapi.feature.user.payload.UserReq;
 import com.kuroko.heathyapi.feature.weight.Weight;
 
 import lombok.Data;
@@ -30,6 +31,7 @@ public class ModelMapper {
         User user = new User();
         user.setName(registerRequest.getName());
         user.setGoal(registerRequest.getGoal());
+        user.setAge(registerRequest.getAge());
         user.setGender(registerRequest.getGender());
         user.setHeight(registerRequest.getHeight());
         user.setWeight(registerRequest.getWeight());
@@ -41,6 +43,16 @@ public class ModelMapper {
         Weight weight = new Weight();
         weight.setWeight(registerRequest.getWeight());
         return weight;
+    }
+
+    public User mapToUser(UserReq userReq) {
+        User user = new User();
+        user.setName(userReq.getName());
+        user.setGender(userReq.getGender());
+        user.setHeight(Double.parseDouble(userReq.getHeight()));
+        user.setWeight(Double.parseDouble(userReq.getWeight()));
+        user.setCoefficientOfActivity(Double.parseDouble(userReq.getCoefficientOfActivity()));
+        return user;
     }
 
 }

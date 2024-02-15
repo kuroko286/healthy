@@ -22,6 +22,7 @@ public class RegisterRequest {
     private String gender;
     @NotNull(message = "Age may not be blank")
     @Min(value = 1, message = "Age must be greater than 0")
+    @Max(value = 200, message = "Age must be less than 200")
     private int age;
     @NotNull(message = "Height may not be blank")
     private double height;

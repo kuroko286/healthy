@@ -1,1 +1,1 @@
-# Healthy api - Spring boot
+# Healthy app

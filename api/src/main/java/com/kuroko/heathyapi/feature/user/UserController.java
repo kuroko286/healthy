@@ -23,7 +23,7 @@ import com.kuroko.heathyapi.feature.user.service.UserService;
 
 @RestController
 @RequestMapping("/v1/users")
-@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class UserController {
     @Autowired
     private UserService userService;

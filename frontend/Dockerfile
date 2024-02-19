@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Expose the port where the app will run
-EXPOSE 3000
+EXPOSE 5173
 
 # Specify the command to run on container startup
-CMD ["npm", "start"]
+CMD npm run dev

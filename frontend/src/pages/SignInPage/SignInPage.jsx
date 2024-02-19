@@ -22,7 +22,7 @@ export default function SignInPage() {
           <SubTitle description={'You need to login to use the service'} />
           <SingInForm />
           <ForgotPassLink to="/forgot-password">
-            Forgot your password?
+            Forgot your password huh?
           </ForgotPassLink>
           <div className="social-login">
             <a

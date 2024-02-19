@@ -3,7 +3,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 // axios.defaults.baseURL = 'https://healthy-hub-rest-api.onrender.com/api';
-axios.defaults.baseURL = 'http://localhost:8080/v1/';
+axios.defaults.baseURL = 'http://localhost:8080/v1';
 
 export const setAuthToken = (token) => {
   axios.defaults.headers.common.Authorization = `Bearer ${token || ''}`;

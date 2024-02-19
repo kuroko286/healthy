@@ -21,7 +21,7 @@ import com.kuroko.heathyapi.feature.meal.model.MealType;
 import com.kuroko.heathyapi.feature.meal.service.MealService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/v1/meals")
 public class MealController {
     @Autowired

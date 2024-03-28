@@ -10,6 +10,6 @@ public interface MessageService {
 
     ChatMessage createMessage(@NonNull ChatMessage quest);
 
-    List<ChatMessage> getAllMessages(String email);
+    List<ChatMessage> getAllMessages(Long id);
 
 }

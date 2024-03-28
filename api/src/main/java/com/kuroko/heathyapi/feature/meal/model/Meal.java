@@ -35,10 +35,6 @@ public class Meal {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
     @OneToMany(orphanRemoval = true, mappedBy = "meal", cascade = CascadeType.ALL)
-    private List<Food> foods;
-
-    public Meal() {
-        this.foods = new ArrayList<>();
-    }
+    private List<Food> foods = new ArrayList<>();
 
 }

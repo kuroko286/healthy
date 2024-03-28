@@ -11,5 +11,7 @@ import com.kuroko.heathyapi.feature.account.model.Account;
 public interface AccountRepository extends JpaRepository<Account, Long> {
     Optional<Account> findByEmail(String email);
 
+    Optional<Account> findById(long id);
+
     boolean existsByEmail(String email);
 }

@@ -21,7 +21,6 @@ export const SingInForm = () => {
 
   const handleSubmitForm = ({ email, password }, actions) => {
     dispatch(signin({ email, password }));
-
     actions.resetForm();
   };
 

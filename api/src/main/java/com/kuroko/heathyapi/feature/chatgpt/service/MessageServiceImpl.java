@@ -26,9 +26,10 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<ChatMessage> getAllMessages(String email) {
-        Account account = accountRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(
-                "Account with email " + email + " not found."));
+    public List<ChatMessage> getAllMessages(Long id) {
+
+        Account account = accountRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+                "Account with id " + id + " not found."));
         User user = account.getUser();
         return messageRepository.findByUser(user);
     }

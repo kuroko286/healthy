@@ -12,7 +12,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 
 import com.kuroko.heathyapi.exception.business.ResourceNotFoundException;
@@ -45,9 +45,9 @@ public class ChatController {
     @Value("${openai.api.url}")
     private String apiUrl;
 
-    @GetMapping("/v1/messages")
-    public ResponseEntity<List<ChatMessage>> getMessages(@RequestAttribute("email") String email) {
-        return ResponseEntity.ok(messageService.getAllMessages(email));
+    @GetMapping("/v1/chatgpt/{id}/messages")
+    public ResponseEntity<List<ChatMessage>> getMessages(@PathVariable Long id) {
+        return ResponseEntity.ok(messageService.getAllMessages(id));
     }
 
     @MessageMapping("/chatgpt")

@@ -5,5 +5,19 @@ public enum MealType {
     LUNCH,
     DINNER,
     SNACK,
-    OTHER
+    OTHER;
+
+    public static MealType getType(String type) {
+        if (type == null) {
+            return OTHER;
+        }
+        type = type.toLowerCase();
+        return switch (type) {
+            case "breakfast" -> BREAKFAST;
+            case "lunch" -> LUNCH;
+            case "dinner" -> DINNER;
+            case "snack" -> SNACK;
+            default -> OTHER;
+        };
+    }
 }

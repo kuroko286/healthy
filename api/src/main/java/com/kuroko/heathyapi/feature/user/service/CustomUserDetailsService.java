@@ -1,14 +1,14 @@
-package com.kuroko.heathyapi.service;
+package com.kuroko.heathyapi.feature.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import com.kuroko.heathyapi.components.CustomUserDetails;
 import com.kuroko.heathyapi.exception.business.ResourceNotFoundException;
 import com.kuroko.heathyapi.feature.account.AccountRepository;
 import com.kuroko.heathyapi.feature.account.model.Account;
+import com.kuroko.heathyapi.feature.user.model.CustomUserDetails;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

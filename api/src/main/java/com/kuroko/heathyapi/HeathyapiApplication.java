@@ -1,7 +1,6 @@
 package com.kuroko.heathyapi;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,60 +21,24 @@ public class HeathyapiApplication {
 		SpringApplication.run(HeathyapiApplication.class, args);
 	}
 
-	// @Override
-	// public void run(String... args) throws Exception {
-	// for (int i = 1; i <= 10000; i++) {
-	// RegisterRequest registerRequest = new RegisterRequest();
-	// registerRequest.setEmail("test" + i + "@test.com");
-	// registerRequest.setPassword(passwordEncoder.encode("12345678"));
-	// registerRequest.setName("test" + i);
-	// registerRequest.setGoal(randomGoal());
-	// registerRequest.setGender(randomGender());
-	// registerRequest.setAge(randomAge());
-	// registerRequest.setHeight(randomHeight());
-	// registerRequest.setWeight(randomWeight());
-	// registerRequest.setCoefficientOfActivity(randomCoff());
-	// accountService.createAccount(registerRequest);
-	// }
+	// public int randomAge() {
+	// int n = (int) (Math.random() * 100) + 15;
+	// return n;
 	// }
 
-	public int randomAge() {
-		int n = (int) (Math.random() * 100) + 15;
-		return n;
-	}
+	// public int randomHeight() {
+	// int n = (int) (Math.random() * 70) + 140;
+	// return n;
+	// }
 
-	public int randomHeight() {
-		int n = (int) (Math.random() * 70) + 140;
-		return n;
-	}
+	// public int randomWeight() {
+	// int n = (int) (Math.random() * 60) + 40;
+	// return n;
+	// }
 
-	public int randomWeight() {
-		int n = (int) (Math.random() * 60) + 40;
-		return n;
-	}
-
-	public double randomCoff() {
-		int n = (int) (Math.random() * 5);
-		double[] coff = { 1.2, 1.375, 1.55, 1.725, 1.9 };
-		return coff[n];
-	}
-
-	private String randomGender() {
-		int n = (int) (Math.random() * 2);
-		if (n == 0) {
-			return "male";
-		} else {
-			return "female";
-		}
-	}
-
-	private String randomGoal() {
-		int n = (int) (Math.random() * 3);
-		if (n == 0) {
-			return "lose fat";
-		} else if (n == 1) {
-			return "maintain";
-		}
-		return "gain muscle";
-	}
+	// public double randomCoff() {
+	// int n = (int) (Math.random() * 5);
+	// double[] coff = { 1.2, 1.375, 1.55, 1.725, 1.9 };
+	// return coff[n];
+	// }
 }

@@ -11,14 +11,18 @@ import lombok.*;
 import java.util.*;;
 
 @Entity
-@Data
+@RequiredArgsConstructor
+@Setter
+@Getter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String goal;
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Goal goal;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     private String avatarURL;
     private int age;
     private double height;
@@ -36,5 +40,12 @@ public class User {
     private List<Meal> meals = new ArrayList<>();
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ChatMessage> messages = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", name=" + name + ", goal=" + goal + ", gender=" + gender + ", avatarURL="
+                + avatarURL + ", age=" + age + ", height=" + height + ", weight=" + weight + ", coefficientOfActivity="
+                + coefficientOfActivity + "]";
+    }
 
 }

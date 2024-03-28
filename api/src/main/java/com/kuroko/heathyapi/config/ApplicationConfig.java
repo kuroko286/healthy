@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.kuroko.heathyapi.service.CustomUserDetailsService;
+import com.kuroko.heathyapi.feature.user.service.CustomUserDetailsService;
 
 import lombok.Data;
 
@@ -37,11 +37,6 @@ public class ApplicationConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
-    // @Bean
-    // public AuthenticationManager authenticationManager() throws Exception {
-    // return new ProviderManager(authenticationProvider());
-    // }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

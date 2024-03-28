@@ -19,39 +19,46 @@ const RecommendedFoodPage = lazy(() =>
 );
 const SettingsPage = lazy(() => import('./pages/SettingsPage/SettingsPage'));
 const ChatGptPage = lazy(() => import('./pages/ChatGptPage/ChatGptPage'));
+const Oauth2Redirect = lazy(() => import('./pages/Oauth2Page/Oauth2Redirect'));
+// const InfoPage = lazy(() => import('./pages/InfoPage/InfoPage'));
 
 import { AppWrapper } from './App.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectToken } from './redux/selesctors';
-import { getCurrentUser, setAuthToken } from './redux/operations';
-// import Oauth2Redirect from './pages/Oauth2Page/Oauth2Redirect';
+import { getCurrentUser } from './redux/operations';
+import { selectIsLoggedIn, selectUserId } from './redux/selectors';
+// import { isUserInfoComplete } from './utils/user';
 
 function PrivateRoute({ children }) {
-  const token = useSelector(selectToken);
-  return token ? <Navigate to="/main" /> : children;
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  return isLoggedIn ? <Navigate to="/main" /> : children;
 }
 function PublicRoute({ children }) {
-  const token = useSelector(selectToken);
-  return !token ? <Navigate to="/welcome" /> : children;
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  return !isLoggedIn ? <Navigate to="/welcome" /> : children;
 }
 
+// function CompleteInfo({ children }) {
+//   // check if user info is completed
+//   const user = useSelector(selectUserId);
+//   return isUserInfoComplete(user.info) ? children : <Navigate to="/info" />;
+// }
 function App() {
-  const token = useSelector(selectToken);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   const dispatch = useDispatch();
+  const userId = useSelector(selectUserId);
 
   useEffect(() => {
-    setAuthToken(token);
-    if (token) {
-      dispatch(getCurrentUser());
+    if (userId) {
+      dispatch(getCurrentUser(userId));
     }
-  }, [token, dispatch]);
+  }, [dispatch, userId]);
 
   return (
     <AppWrapper>
       <Routes>
         <Route path="/" element={<SharedLayout />}>
-          {token ? (
+          {isLoggedIn ? (
             <Route
               index
               element={
@@ -154,7 +161,8 @@ function App() {
               </PublicRoute>
             }
           />
-          {/* <Route path="/oauth2/redirect" element={<Oauth2Redirect />} /> */}
+          {/* <Route path="/info" element={<InfoPage />} /> */}
+          <Route path="/oauth2/redirect" element={<Oauth2Redirect />} />
           <Route path="*" element={<ErrorPage />} />
         </Route>
       </Routes>

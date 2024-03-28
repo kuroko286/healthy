@@ -1,7 +1,7 @@
 package com.kuroko.heathyapi.components;
 
 import com.kuroko.heathyapi.feature.user.model.User;
-import com.kuroko.heathyapi.util.UserUtil;
+import com.kuroko.heathyapi.util.NutritionCaculator;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
-public class Nutrition {
-    private double carbohydrates;
-    private double protein;
-    private double fat;
+public class Nutrition { // in grams
+    private int carbohydrates;
+    private int protein;
+    private int fat;
 
     public Nutrition(User user) {
-        this.carbohydrates = UserUtil.caculateCarbonhydrates(user);
-        this.protein = UserUtil.caculateProtein(user);
-        this.fat = UserUtil.caculateFat(user);
+        this.carbohydrates = NutritionCaculator.caculateCarbonhydrates(user);
+        this.protein = NutritionCaculator.caculateProtein(user);
+        this.fat = NutritionCaculator.caculateFat(user);
     }
 }

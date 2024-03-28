@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FoodDto {
+public class FoodDto { // DTO common for request and responsed
     @JsonProperty("_id")
     private Long id;
     private String name;

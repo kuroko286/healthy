@@ -16,15 +16,8 @@ import lombok.NoArgsConstructor;
 public class WaterDto {
     private double ml; // water intake in milis
 
-    public WaterDto getWaterDto(List<Water> water) {
+    public WaterDto(List<Water> water) {
         double ml = water.stream().mapToDouble(Water::getAmount).sum();
-        return new WaterDto(ml);
+        this.ml = ml;
     }
-
-    public WaterDto(User user) {
-        // get water of the current day
-        this.ml = user.getWater().stream().filter(w -> w.getCreatedAt().toLocalDate().equals(LocalDate.now()))
-                .mapToDouble(Water::getAmount).sum();
-    }
-
 }

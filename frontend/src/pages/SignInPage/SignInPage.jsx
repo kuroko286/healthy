@@ -10,7 +10,7 @@ import { Title } from '../../components/Title/Title';
 import { SubTitle } from '../../components/SubTitle/SubTitle';
 import { SingInForm } from '../../components/SignInForm/SingInForm';
 import { SignInOrUp } from '../../components/SignInOrUp/SignInOrUp';
-import { GOOGLE_AUTH_URL } from '../../constants';
+import { GOOGLE_AUTH_URL } from '../../constants/url';
 
 export default function SignInPage() {
   return (
@@ -22,14 +22,13 @@ export default function SignInPage() {
           <SubTitle description={'You need to login to use the service'} />
           <SingInForm />
           <ForgotPassLink to="/forgot-password">
-            Forgot your password huh?
+            Forgot your password huuusdsduh?
           </ForgotPassLink>
           <div className="social-login">
             <a
               className="btn btn-block social-btn google"
               href={GOOGLE_AUTH_URL}
             >
-              {/* <img src={googleLogo} alt="Google" />  */}
               Log in with Google
             </a>
           </div>

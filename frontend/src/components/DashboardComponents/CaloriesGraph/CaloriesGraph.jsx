@@ -1,47 +1,31 @@
 import {
-  Chart as ChartJS,
   CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
+  Chart as ChartJS,
   Filler,
   Legend,
+  LineElement,
+  LinearScale,
+  PointElement,
+  Title,
+  Tooltip,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { useSelector } from 'react-redux';
+import { selectUserStatistics } from '../../../redux/selectors';
 import {
-  Overflow,
   CaloriesAverageNumber,
   CaloriesAverageTitle,
   CaloriesHeader,
   CaloriesHeadingWrapper,
   CaloriesSectionhWrapper,
-  СaloriesGraphWrapper,
-  ScrollerWrapper,
   HeaderData,
+  Overflow,
+  ScrollerWrapper,
+  СaloriesGraphWrapper,
 } from './CaloriesGraph.styled';
-import { useState, useEffect } from 'react';
-import { getMonthlyStatistics } from '../../../redux/operations';
-import { useDispatch } from 'react-redux';
 
 export const CaloriesGraph = ({ month }) => {
-  const [dataOfUser, setDataOfUser] = useState([]);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (month !== null) {
-      const fetchData = async (month) => {
-        try {
-          const data = await dispatch(getMonthlyStatistics(month));
-          setDataOfUser(data.payload);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
-      fetchData(month);
-    }
-  }, [month, dispatch]);
+  const dataOfUser = useSelector(selectUserStatistics);
 
   ChartJS.register(
     CategoryScale,

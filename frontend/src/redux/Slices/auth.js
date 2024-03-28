@@ -6,17 +6,18 @@ import {
   signin,
   signup,
 } from '../operations';
+import { getCookieByName } from '../../utils/Cookie';
 
 const initialState = {
-  user: null,
-  token: null,
-
+  userId: getCookieByName('user_id'),
+  isLoggedIn: getCookieByName('user_id') ? true : false,
   isLoading: false,
   error: null,
 };
 
 const handleFulfilled = (state, action) => {
-  state.token = action.payload.token;
+  state.userId = action.payload;
+  state.isLoggedIn = true;
   state.isLoading = false;
   state.error = null;
 };
@@ -26,6 +27,7 @@ const handlePending = (state) => {
 };
 
 const handleRejected = (state, action) => {
+  state.userId = null;
   state.isLoading = false;
   state.error = action.payload;
 };
@@ -34,8 +36,11 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setToken: (state, action) => {
-      state.token = action.payload;
+    updateUserId: (state, action) => {
+      state.userId = action.payload;
+    },
+    reset: () => {
+      return initialState;
     },
   },
 
@@ -48,14 +53,13 @@ const authSlice = createSlice({
       .addCase(signin.pending, handlePending)
       .addCase(signin.rejected, handleRejected)
       .addCase(signOut.fulfilled, (state) => {
-        state.token = null;
+        state.isLoggedIn = null;
         state.isLoading = false;
         state.error = null;
       })
       .addCase(signOut.pending, handlePending)
       .addCase(signOut.rejected, handleRejected)
       .addCase(forgotPassword.fulfilled, (state) => {
-        state.token = null;
         state.isLoading = false;
         state.error = null;
       })
@@ -63,11 +67,12 @@ const authSlice = createSlice({
       .addCase(forgotPassword.rejected, handleRejected)
       .addCase(getCurrentUser.pending, handlePending)
       .addCase(getCurrentUser.fulfilled, (state) => {
+        state.isLoggedIn = true;
         state.isLoading = false;
         state.error = null;
       })
       .addCase(getCurrentUser.rejected, (state, action) => {
-        state.token = null;
+        state.isLoggedIn = false;
         state.isLoading = false;
         state.error = action.payload;
       });
@@ -76,4 +81,4 @@ const authSlice = createSlice({
 
 export const authReducer = authSlice.reducer;
 
-export const { setToken } = authSlice.actions;
+export const { updateUserId, reset } = authSlice.actions;

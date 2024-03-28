@@ -15,10 +15,11 @@ import {
   ContainerForBtns,
   BtnConfirm,
 } from './RecordDiaryModal.styled';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getCurrentUser, updateFoodIntake } from '../../../../redux/operations';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
+import { selectUserId } from '../../../../redux/selectors';
 
 export default function EditDiaryModal({
   onClose,
@@ -28,6 +29,7 @@ export default function EditDiaryModal({
   meal,
 }) {
   const dispatch = useDispatch();
+  const userId = useSelector(selectUserId);
   const [foods, setFoods] = useState([
     {
       name: meal ? meal.name : '',
@@ -85,14 +87,17 @@ export default function EditDiaryModal({
 
           dispatch(
             updateFoodIntake({
-              foodId: meal._id,
-              foodIntakeData: foodIntakeData,
+              userId,
+              foodInfo: {
+                foodId: meal._id,
+                foodIntakeData: foodIntakeData,
+              },
             })
           );
 
           onRecord(foodIntakeData);
           setTimeout(() => {
-            dispatch(getCurrentUser());
+            dispatch(getCurrentUser(userId));
           }, 100);
           onClose();
         }

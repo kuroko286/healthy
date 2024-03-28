@@ -1,4 +1,4 @@
-package com.kuroko.heathyapi.feature.email;
+package com.kuroko.heathyapi.service.email;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

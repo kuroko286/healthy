@@ -3,18 +3,17 @@ services:
   # backend (spring boot)
   springapp:
     build:
-      context: .
+      context: ./api
       dockerfile: Dockerfile
     ports:
       - 8080:8080
     networks:
       - healthy
     volumes:
-      - .:/app  # mounting a volume to hot reload container to source code 
+      - ./api:/app  # mounting a volume to hot reload container to source code 
     depends_on:
       - mysqldb
       - redis
-      - rabbitmq
   
   # frontend (react)
   frontend:
@@ -40,7 +39,7 @@ services:
       MYSQL_USER: kuroko
       MYSQL_PASSWORD: 2862003
     ports:
-      - 3306:3306 # host port: container port
+      - 3307:3307 # host port: container port
     networks:
       - healthy
     volumes:
@@ -49,18 +48,24 @@ services:
 
   # redis
   redis:
-    image: redis:latest
+    build:
+      context: ./cache
+      dockerfile: Dockerfile
     ports:
       - 6379:6379
+    volumes:
+      - ./cache:/data
     networks:
       - healthy
 
   # rabbitmq
-  rabbitmq:
-    image: rabbitmq:latest
-    restart: always
-    ports:
-      - "5672:5672"  # RabbitMQ default port
+  # rabbitmq:
+  #   image: rabbitmq:3.12-alpine
+  #   restart: always
+  #   volumes:
+  #     - ./rabbitmq:/var/lib/rabbitmq
+  #   ports:
+  #     - "5672:5672"  # RabbitMQ default port
   
 
 networks:

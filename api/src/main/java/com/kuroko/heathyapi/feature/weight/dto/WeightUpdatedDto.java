@@ -2,7 +2,7 @@ package com.kuroko.heathyapi.feature.weight.dto;
 
 import com.kuroko.heathyapi.components.Nutrition;
 import com.kuroko.heathyapi.feature.user.model.User;
-import com.kuroko.heathyapi.util.UserUtil;
+import com.kuroko.heathyapi.util.NutritionCaculator;
 
 import lombok.Data;
 
@@ -16,7 +16,7 @@ public class WeightUpdatedDto {
     public WeightUpdatedDto(double weight, User user) {
         this.weight = weight;
         this.dailyNutrition = new Nutrition(user);
-        this.dailyCalories = UserUtil.caculateDailyCalories(user);
-        this.dailyWater = UserUtil.caculateDailyWater(user);
+        this.dailyCalories = NutritionCaculator.caculateDailyCalories(user);
+        this.dailyWater = NutritionCaculator.caculateDailyWater(user);
     }
 }

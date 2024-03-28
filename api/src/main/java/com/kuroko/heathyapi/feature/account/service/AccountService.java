@@ -1,7 +1,5 @@
 package com.kuroko.heathyapi.feature.account.service;
 
-import java.util.List;
-
 import com.kuroko.heathyapi.feature.account.payload.AuthResponse;
 import com.kuroko.heathyapi.feature.account.payload.LoginRequest;
 import com.kuroko.heathyapi.feature.account.payload.RegisterRequest;
@@ -16,4 +14,6 @@ public interface AccountService {
     void forgotPassword(String email);
 
     void resetPassword(String token, String password);
+
+    void logout(String token);
 }

@@ -21,7 +21,7 @@ import {
   deleteFoodIntake,
   getCurrentUser,
 } from '../../../../redux/operations.js';
-import { selectUserData } from '../../../../redux/selesctors.js';
+import { selectUserData, selectUserId } from '../../../../redux/selectors.js';
 
 const DiaryItem = ({ title, image }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,6 +30,7 @@ const DiaryItem = ({ title, image }) => {
   const toggleModal = () => setIsModalOpen(!isModalOpen);
 
   const user = useSelector(selectUserData);
+  const userId = useSelector(selectUserId);
 
   useEffect(() => {
     const mealType = String(title.toLowerCase());
@@ -43,8 +44,10 @@ const DiaryItem = ({ title, image }) => {
   const handleDelete = async () => {
     try {
       setNutritionInfo(null);
-      await dispatch(deleteFoodIntake(title.toLowerCase()));
-      await dispatch(getCurrentUser());
+      await dispatch(
+        deleteFoodIntake({ userId, mealType: title.toLowerCase() })
+      );
+      await dispatch(getCurrentUser(userId));
     } catch (error) {
       console.error(error);
     }

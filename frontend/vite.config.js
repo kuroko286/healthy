@@ -12,8 +12,8 @@ export default defineConfig({
       assets: '/src/assets',
     },
   },
-  // define: {
-  //   globals: {},
-  // },
+  server: {
+    port: 3000,
+  },
   base: '/',
 });

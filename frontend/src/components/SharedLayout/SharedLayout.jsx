@@ -5,7 +5,7 @@ import { Container } from './SharedLayout.styled';
 import { Toaster } from 'react-hot-toast';
 import { Loader } from '../Loader/Loader';
 import { useSelector } from 'react-redux';
-import { selectIsLoadAuth, selectIsLoadData } from '../../redux/selesctors';
+import { selectIsLoadAuth, selectIsLoadData } from '../../redux/selectors';
 // import { setToken } from '../../redux/auth/auth';
 
 const SharedLayout = () => {

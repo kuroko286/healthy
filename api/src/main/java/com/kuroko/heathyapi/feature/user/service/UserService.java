@@ -2,22 +2,22 @@ package com.kuroko.heathyapi.feature.user.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.kuroko.heathyapi.feature.user.payload.Goal;
-import com.kuroko.heathyapi.feature.user.payload.GoalUpdatedDto;
-import com.kuroko.heathyapi.feature.user.payload.StatisticsDto;
-import com.kuroko.heathyapi.feature.user.payload.UserDto;
-import com.kuroko.heathyapi.feature.user.payload.UserReq;
+import com.kuroko.heathyapi.feature.user.payload.GoalRequest;
+import com.kuroko.heathyapi.feature.user.payload.GoalResponse;
+import com.kuroko.heathyapi.feature.user.payload.StatisticsResponse;
+import com.kuroko.heathyapi.feature.user.payload.UserResponse;
+import com.kuroko.heathyapi.feature.user.payload.UserRequest;
 
 public interface UserService {
 
-    StatisticsDto getStatistics(int month, String email);
+    StatisticsResponse getStatistics(int month, int year, Long id);
 
-    UserDto getCurrentUser(String email);
+    UserResponse getCurrentUser(Long id);
 
-    UserDto updateUserInfo(String email, UserReq userReq);
+    UserResponse updateUserInfo(Long id, UserRequest userReq);
 
-    GoalUpdatedDto updateUserGoal(String email, Goal goal);
+    GoalResponse updateUserGoal(Long id, GoalRequest goal);
 
-    void updateUserAvatar(String email, MultipartFile avatar);
+    void updateUserAvatar(Long id, MultipartFile avatar);
 
 }

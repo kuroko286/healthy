@@ -9,14 +9,15 @@ import org.springframework.stereotype.Service;
 import com.kuroko.heathyapi.feature.account.AccountRepository;
 import com.kuroko.heathyapi.feature.account.model.Account;
 import com.kuroko.heathyapi.feature.food.FoodRepository;
-import com.kuroko.heathyapi.feature.food.dto.AddFoodDto;
+import com.kuroko.heathyapi.feature.food.dto.AddFoodRequest;
 import com.kuroko.heathyapi.feature.food.dto.FoodDto;
-import com.kuroko.heathyapi.feature.food.dto.FoodIntakeData;
+import com.kuroko.heathyapi.feature.food.dto.UpdateFoodRequest;
 import com.kuroko.heathyapi.feature.food.model.Food;
 import com.kuroko.heathyapi.feature.meal.MealRepository;
-import com.kuroko.heathyapi.feature.meal.dto.MealsPerDayDto;
+import com.kuroko.heathyapi.feature.meal.dto.MealsPerDayResponse;
 import com.kuroko.heathyapi.feature.meal.model.Meal;
 import com.kuroko.heathyapi.feature.meal.model.MealType;
+import com.kuroko.heathyapi.feature.user.UserRepository;
 import com.kuroko.heathyapi.feature.user.model.User;
 import com.kuroko.heathyapi.exception.business.*;
 
@@ -25,61 +26,49 @@ public class MealServiceImpl implements MealService {
     @Autowired
     private MealRepository mealRepository;
     @Autowired
-    private AccountRepository accountRepository;
-    @Autowired
-    private FoodRepository foodRepository;
+    private UserRepository userRepository;
 
     @Override
     public List<Meal> getMealsByUserAndDate(User user, LocalDate date) {
-        return mealRepository.findByUserAndDateRange(user, date.atStartOfDay(), date.atStartOfDay().plusDays(1));
+        return mealRepository.findByUserAndTimeRange(user, date.atStartOfDay(), date.atStartOfDay().plusDays(1));
     }
 
     @Override
-    public MealsPerDayDto addFoodIntake(String email, AddFoodDto addFoodDto) {
-        Account account = accountRepository.findByEmail(email).orElseThrow(
-                () -> new ResourceNotFoundException("Account with email " + email + " not found."));
-        User user = account.getUser();
+    public MealsPerDayResponse addFoodIntake(Long id, AddFoodRequest foodRequest) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+                "User with id " + id + " not found."));
         Meal meal = mealRepository
                 .findByUserAndDateRangeAndType(user, LocalDate.now().atStartOfDay(),
-                        LocalDate.now().atStartOfDay().plusDays(1), addFoodDto.getMealType())
-                .orElse(new Meal());
-        meal.setType(addFoodDto.getMealType());
+                        LocalDate.now().atStartOfDay().plusDays(1), foodRequest.getMealType())
+                .orElse(new Meal()); // may not created yet
+        meal.setType(foodRequest.getMealType());
         meal.setUser(user);
-        mealRepository.save(meal);
-        List<Food> foods = addFoodDto.getFoods().stream().map((f) -> mapToFood2(f, meal)).toList();
-        if (foods.size() > 0) {
-            foodRepository.saveAll(foods);
+        List<Food> foods = foodRequest.getFoods().stream().map((f) -> mapToFood(f)).toList();
+        if (meal.getFoods() != null) {
+            meal.getFoods().addAll(foods);
+        } else {
+            meal.setFoods(foods);
         }
-        return new MealsPerDayDto(getMealsByUserAndDate(user, LocalDate.now()));
+        for (int i = 0; i < foods.size(); i++) {
+            foods.get(i).setMeal(meal);
+        }
+        mealRepository.save(meal);
+
+        return new MealsPerDayResponse(getMealsByUserAndDate(user, LocalDate.now()));
     }
 
     @Override
-    public MealsPerDayDto deleteFoodIntake(String email, MealType mealType) {
-        Account account = accountRepository.findByEmail(email).orElseThrow(
-                () -> new ResourceNotFoundException("Account with email " + email + " not found."));
-        User user = account.getUser();
+    public MealsPerDayResponse deleteFoodIntake(Long id, MealType mealType) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+                "User with id " + id + " not found."));
         Meal meal = mealRepository.findByUserAndDateRangeAndType(user, LocalDate.now().atStartOfDay(),
                 LocalDate.now().atStartOfDay().plusDays(1), mealType).orElseThrow(
                         () -> new ResourceNotFoundException("Meal with mealType " + mealType + " not found."));
-        foodRepository.deleteAll(meal.getFoods());
+        if (meal != null) {
+            mealRepository.delete(meal);
+        }
 
-        return new MealsPerDayDto(getMealsByUserAndDate(user, LocalDate.now()));
-    }
-
-    @Override
-    public MealsPerDayDto updateFoodIntake(String email, long foodId, FoodIntakeData updateFoodDto) {
-
-        Account account = accountRepository.findByEmail(email).orElseThrow(
-                () -> new ResourceNotFoundException("Account with email " + email + " not found."));
-        User user = account.getUser();
-
-        Food food = foodRepository.findById(foodId).orElseThrow(
-                () -> new ResourceNotFoundException("Food with id " + foodId + " not found."));
-        food.setName(updateFoodDto.getFoodDetails().getName());
-        food.setCalories(updateFoodDto.getFoodDetails().getCalories());
-        food.setNutrition(updateFoodDto.getFoodDetails().getNutrition());
-        foodRepository.save(food);
-        return new MealsPerDayDto(getMealsByUserAndDate(user, LocalDate.now()));
+        return new MealsPerDayResponse(getMealsByUserAndDate(user, LocalDate.now()));
     }
 
     public Food mapToFood(FoodDto foodDto) {
@@ -87,15 +76,6 @@ public class MealServiceImpl implements MealService {
         food.setName(foodDto.getName());
         food.setCalories(foodDto.getCalories());
         food.setNutrition(foodDto.getNutrition());
-        return food;
-    }
-
-    public Food mapToFood2(FoodDto foodDto, Meal meal) {
-        Food food = new Food();
-        food.setName(foodDto.getName());
-        food.setCalories(foodDto.getCalories());
-        food.setNutrition(foodDto.getNutrition());
-        food.setMeal(meal);
         return food;
     }
 }

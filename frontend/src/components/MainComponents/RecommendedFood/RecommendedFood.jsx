@@ -5,7 +5,8 @@ import {
   selectRecFood,
   selectIsLoadAuth,
   selectIsLoadData,
-} from '../../../redux/selesctors';
+  selectUserId,
+} from '../../../redux/selectors';
 import { useEffect } from 'react';
 import { refreshRecommendedFood } from '../../../redux/operations';
 import { NavLink } from 'react-router-dom';
@@ -15,10 +16,11 @@ export default function RecommendedFoodPage() {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectIsLoadAuth && selectIsLoadData);
   const food = useSelector(selectRecFood);
+  const userId = useSelector(selectUserId);
   let reducedArr = [];
 
   useEffect(() => {
-    dispatch(refreshRecommendedFood());
+    dispatch(refreshRecommendedFood(userId));
   }, [dispatch]);
 
   if (food) {

@@ -1,93 +1,64 @@
 package com.kuroko.heathyapi.feature.oauth2;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
 
-import org.springframework.boot.actuate.autoconfigure.wavefront.WavefrontProperties.Application;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import com.kuroko.heathyapi.config.ApplicationConfig;
-import com.kuroko.heathyapi.exception.business.ValidationFailedException;
+import com.kuroko.heathyapi.enums.CookieName;
+import com.kuroko.heathyapi.exception.business.ResourceNotFoundException;
+import com.kuroko.heathyapi.feature.account.AccountRepository;
+import com.kuroko.heathyapi.feature.account.model.Account;
+import com.kuroko.heathyapi.feature.account.model.Role;
+import com.kuroko.heathyapi.feature.user.model.CustomUserDetails;
 import com.kuroko.heathyapi.feature.user.model.User;
 import com.kuroko.heathyapi.service.JwtService;
-import com.kuroko.heathyapi.util.CookieUtils;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.net.URI;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
-public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-
+public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+    @Autowired
+    private final AccountRepository accountRepository;
+    @Autowired
     private final JwtService jwtService;
 
-    private final ApplicationConfig appConfig;
-
-    private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    @Value("${app.frontend.redirect-uri}")
+    private String redirectUri;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
-        String targetUrl = determineTargetUrl(request, response, authentication);
+        if (authentication instanceof OAuth2AuthenticationToken) {
+            OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) authentication;
+            OAuth2User oauth2User = oauth2Token.getPrincipal();
+            String email = oauth2User.getAttribute("email");
+            Account account = accountRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(
+                    "Account with email " + email + " not found."));
 
-        if (response.isCommitted()) {
-            log.debug("Response has already been committed. Unable to redirect to " + targetUrl);
-            return;
+            UserDetails userDetails = new CustomUserDetails(account);
+            String jwtToken = jwtService.generateToken(userDetails);
+            Cookie tokenCookie = new Cookie(CookieName.ACCESS_TOKEN.toString(), jwtToken);
+            tokenCookie.setHttpOnly(true);
+            tokenCookie.setPath("/");
+            tokenCookie.setMaxAge(60 * 60 * 24 * 365);
+            Cookie idCookie = new Cookie(CookieName.USER_ID.toString(), account.getUser().getId().toString());
+            idCookie.setPath("/");
+            idCookie.setMaxAge(60 * 60 * 24 * 365);
+            response.addCookie(tokenCookie);
+            response.addCookie(idCookie);
+            response.sendRedirect(redirectUri);
         }
-
-        clearAuthenticationAttributes(request, response);
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
-    }
-
-    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
-            Authentication authentication) {
-        Optional<String> redirectUri = CookieUtils
-                .getCookie(request, HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME)
-                .map(Cookie::getValue);
-
-        if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
-            throw new ValidationFailedException(
-                    "Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
-        }
-
-        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
-
-        String token = jwtService.generateToken((UserDetails) authentication.getPrincipal());
-
-        return UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("token", token)
-                .build().toUriString();
-    }
-
-    protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
-        super.clearAuthenticationAttributes(request);
-        httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
-    }
-
-    private boolean isAuthorizedRedirectUri(String uri) {
-        URI clientRedirectUri = URI.create(uri);
-
-        return appConfig.getAuthorizedRedirectUris()
-                .stream()
-                .anyMatch(authorizedRedirectUri -> {
-                    // Only validate host and port. Let the clients use different paths if they want
-                    // to
-                    URI authorizedURI = URI.create(authorizedRedirectUri);
-                    if (authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
-                            && authorizedURI.getPort() == clientRedirectUri.getPort()) {
-                        return true;
-                    }
-                    return false;
-                });
     }
 }

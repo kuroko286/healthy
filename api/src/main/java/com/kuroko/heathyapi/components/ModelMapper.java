@@ -7,8 +7,10 @@ import org.springframework.stereotype.Component;
 import com.kuroko.heathyapi.feature.account.model.Account;
 import com.kuroko.heathyapi.feature.account.model.Role;
 import com.kuroko.heathyapi.feature.account.payload.RegisterRequest;
+import com.kuroko.heathyapi.feature.user.model.Gender;
+import com.kuroko.heathyapi.feature.user.model.Goal;
 import com.kuroko.heathyapi.feature.user.model.User;
-import com.kuroko.heathyapi.feature.user.payload.UserReq;
+import com.kuroko.heathyapi.feature.user.payload.UserRequest;
 import com.kuroko.heathyapi.feature.weight.Weight;
 
 import lombok.Data;
@@ -30,9 +32,9 @@ public class ModelMapper {
     public User mapToUser(RegisterRequest registerRequest) {
         User user = new User();
         user.setName(registerRequest.getName());
-        user.setGoal(registerRequest.getGoal());
+        user.setGoal(Goal.getGoal(registerRequest.getGoal()));
         user.setAge(registerRequest.getAge());
-        user.setGender(registerRequest.getGender());
+        user.setGender(Gender.getGender(registerRequest.getGender()));
         user.setHeight(registerRequest.getHeight());
         user.setWeight(registerRequest.getWeight());
         user.setCoefficientOfActivity(registerRequest.getCoefficientOfActivity());
@@ -45,13 +47,13 @@ public class ModelMapper {
         return weight;
     }
 
-    public User mapToUser(UserReq userReq) {
+    public User mapToUser(UserRequest userReq) {
         User user = new User();
         user.setName(userReq.getName());
-        user.setGender(userReq.getGender());
-        user.setHeight(Double.parseDouble(userReq.getHeight()));
-        user.setWeight(Double.parseDouble(userReq.getWeight()));
-        user.setCoefficientOfActivity(Double.parseDouble(userReq.getCoefficientOfActivity()));
+        user.setGender(Gender.getGender(userReq.getGender()));
+        user.setHeight(userReq.getHeight());
+        user.setWeight(userReq.getWeight());
+        user.setCoefficientOfActivity(userReq.getCoefficientOfActivity());
         return user;
     }
 

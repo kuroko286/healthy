@@ -1,11 +1,10 @@
-package com.kuroko.heathyapi.components;
+package com.kuroko.heathyapi.feature.user.model;
 
 import java.util.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import com.kuroko.heathyapi.feature.account.model.Account;
 
@@ -14,17 +13,11 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class CustomUserDetails implements UserDetails, OAuth2User {
+public class CustomUserDetails implements UserDetails {
     private Account account;
-    private Map<String, Object> attributes;
 
     public CustomUserDetails(Account account) {
         this.account = account;
-    }
-
-    public CustomUserDetails(Account account, Map<String, Object> attributes) {
-        this.account = account;
-        this.attributes = attributes;
     }
 
     public long getId() {
@@ -64,16 +57,6 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public Map<String, Object> getAttributes() {
-        return attributes;
-    }
-
-    @Override
-    public String getName() {
-        return String.valueOf(account.getId());
     }
 
 }

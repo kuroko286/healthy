@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import icons from '../../../assets/icons.svg';
 
 import {
@@ -15,6 +15,7 @@ import { Formik, Form } from 'formik';
 
 import * as Yup from 'yup';
 import { addUserWeight, getCurrentUser } from '../../../redux/operations';
+import { selectUserId } from '../../../redux/selectors';
 
 export const WeightModal = ({
   setWeightModal,
@@ -24,13 +25,14 @@ export const WeightModal = ({
   setMenuModal,
 }) => {
   const dispatch = useDispatch();
+  const userId = useSelector(selectUserId);
 
   const handleSave = (values) => {
-    dispatch(addUserWeight(values));
+    dispatch(addUserWeight({ userId, values }));
     setWeightValue(values.weight);
 
     setTimeout(() => {
-      dispatch(getCurrentUser());
+      dispatch(getCurrentUser(userId));
     }, 300);
     setWeightModal(false);
     setOverlay(false);

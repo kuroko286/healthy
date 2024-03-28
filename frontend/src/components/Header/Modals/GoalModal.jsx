@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import icons from '../../../assets/icons.svg';
 
 import {
@@ -16,6 +16,8 @@ import {
 } from './ModalStyles';
 import { Formik, Form } from 'formik';
 import { getCurrentUser, updateUserGoal } from '../../../redux/operations';
+import { selectUserId } from '../../../redux/selectors';
+import { Goal } from '../../../constants/user';
 
 export const GoalModal = ({
   setGoalModal,
@@ -28,12 +30,13 @@ export const GoalModal = ({
   setMenuModal,
 }) => {
   const dispatch = useDispatch();
+  const userId = useSelector(selectUserId);
 
   const handleSave = (values) => {
-    dispatch(updateUserGoal(values));
+    dispatch(updateUserGoal({ userId, values }));
     setGoalValue(values.goal);
     setTimeout(() => {
-      dispatch(getCurrentUser());
+      dispatch(getCurrentUser(userId));
     }, 300);
 
     setGoalModal(false);
@@ -70,7 +73,7 @@ export const GoalModal = ({
                   type="radio"
                   id="goal1"
                   name="goal"
-                  value="lose fat"
+                  value={Goal.LOSE_WEIGHT}
                 />
                 <ImageWrapper>
                   <img src={run} alt="Running" />
@@ -82,7 +85,7 @@ export const GoalModal = ({
                   type="radio"
                   id="goal2"
                   name="goal"
-                  value="maintain"
+                  value={Goal.MAINTAIN}
                 />
                 <ImageWrapper>
                   <img src={maintain} alt="Running" />
@@ -94,7 +97,7 @@ export const GoalModal = ({
                   type="radio"
                   id="goal3"
                   name="goal"
-                  value="gain muscle"
+                  value={Goal.GAIN_MUSCLE}
                 />
                 <ImageWrapper>
                   <img src={muscle} alt="Running" />

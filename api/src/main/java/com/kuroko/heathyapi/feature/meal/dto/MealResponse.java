@@ -9,7 +9,7 @@ import com.kuroko.heathyapi.feature.meal.model.Meal;
 import lombok.Data;
 
 @Data
-public class MealDto {
+public class MealResponse {
     private long id;
     private double totalCarbohydrates;
     private double totalProtein;
@@ -18,7 +18,7 @@ public class MealDto {
 
     private List<FoodDto> foods;
 
-    public MealDto(Meal meal) {
+    public MealResponse(Meal meal) {
         if (meal == null) {
             return;
         }
@@ -30,7 +30,7 @@ public class MealDto {
         this.totalCalories = meal.getFoods().stream().mapToDouble(f -> f.getCalories()).sum();
     }
 
-    public MealDto() {
+    public MealResponse() {
         this.foods = new ArrayList<>();
     }
 

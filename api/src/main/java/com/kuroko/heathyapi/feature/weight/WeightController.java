@@ -14,18 +14,11 @@ import com.kuroko.heathyapi.feature.weight.dto.WeightUpdatedDto;
 import com.kuroko.heathyapi.feature.weight.service.WeightServiceImpl;
 
 @RestController
-@RequestMapping("/v1/weight")
+@RequestMapping("/v1/weights")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class WeightController {
 
     @Autowired
     private WeightServiceImpl weightService;
-
-    @PostMapping
-    public ResponseEntity<WeightUpdatedDto> create(@RequestAttribute("email") String email,
-            @RequestBody WeightDto weightDto) {
-        WeightUpdatedDto weight = weightService.createWeight(email, weightDto);
-        return ResponseEntity.ok().body(weight);
-    }
 
 }

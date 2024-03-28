@@ -20,7 +20,7 @@ import {
 import WaterChart from './WaterChart/WaterChart';
 import icons from '../../../assets/icons.svg';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectUserData } from '../../../redux/selesctors';
+import { selectUserData, selectUserId } from '../../../redux/selectors';
 import {
   getCurrentUser,
   addWaterIntake,
@@ -58,6 +58,7 @@ export default function Water() {
   const [errorMessage, setErrorMessage] = useState('');
   const [inputBorder, setInputBorder] = useState('var(--primary-btn-color)');
   const dispatch = useDispatch();
+  const userId = useSelector(selectUserId);
   const userData = useSelector(selectUserData);
 
   function openModal() {
@@ -74,18 +75,21 @@ export default function Water() {
     e.preventDefault();
     if (isValid) {
       await dispatch(
-        addWaterIntake({ ml: e.target.children[0].children[0].value })
+        addWaterIntake({
+          userId,
+          waterIntakeData: { ml: e.target.children[0].children[0].value },
+        })
       );
       closeModal();
       setInputBorder('var(--primary-btn-color)');
 
-      await dispatch(getCurrentUser());
+      await dispatch(getCurrentUser(userId));
     }
   };
 
   const deleteWater = async () => {
-    await dispatch(deleteWaterIntake());
-    await dispatch(getCurrentUser());
+    await dispatch(deleteWaterIntake(userId));
+    await dispatch(getCurrentUser(userId));
   };
 
   const handleInputChange = (e) => {
@@ -126,11 +130,11 @@ export default function Water() {
 
   function calcLeft() {
     if (userData?.consumedWaterByDay?.ml) {
-      if (userData?.user?.dailyWater - userData?.consumedWaterByDay?.ml >= 0)
-        return userData?.user?.dailyWater - userData?.consumedWaterByDay?.ml;
+      if (userData?.info?.dailyWater - userData?.consumedWaterByDay?.ml >= 0)
+        return userData?.info?.dailyWater - userData?.consumedWaterByDay?.ml;
       else return 0;
     } else {
-      return userData?.user?.dailyWater;
+      return userData?.info?.dailyWater;
     }
   }
 
@@ -140,7 +144,7 @@ export default function Water() {
       <FullFrame>
         <WaterChart
           percentage={Math.round(
-            (userData.consumedWaterByDay?.ml * 100) / userData.user?.dailyWater
+            (userData.consumedWaterByDay?.ml * 100) / userData.info?.dailyWater
           )}
         />
         <Info>

@@ -2,12 +2,7 @@ package com.kuroko.heathyapi.feature.weight.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,15 +22,12 @@ public class WeightServiceImpl implements WeightService {
     @Autowired
     private WeightRepository weightRepository;
     @Autowired
-    private AccountRepository accountRepository;
-    @Autowired
     private UserRepository userRepository;
 
     @Override
-    public WeightUpdatedDto createWeight(String email, WeightDto weightDto) {
-        Account account = accountRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Account with email " + email + " not found."));
-        User user = account.getUser();
+    public WeightUpdatedDto createWeight(Long id, WeightDto weightDto) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+                "User with id " + id + " not found."));
         user.setWeight(weightDto.getWeight());
         userRepository.save(user);
         // update or create if not exists today weight of user

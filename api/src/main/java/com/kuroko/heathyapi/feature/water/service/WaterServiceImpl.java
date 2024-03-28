@@ -2,15 +2,13 @@ package com.kuroko.heathyapi.feature.water.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kuroko.heathyapi.exception.business.ResourceNotFoundException;
-import com.kuroko.heathyapi.feature.account.AccountRepository;
-import com.kuroko.heathyapi.feature.account.model.Account;
+import com.kuroko.heathyapi.feature.user.UserRepository;
 import com.kuroko.heathyapi.feature.user.model.User;
 import com.kuroko.heathyapi.feature.water.Water;
 import com.kuroko.heathyapi.feature.water.WaterRepository;
@@ -21,7 +19,7 @@ public class WaterServiceImpl implements WaterService {
     @Autowired
     private WaterRepository waterRepository;
     @Autowired
-    private AccountRepository accountRepository;
+    private UserRepository userRepository;
 
     @Override
     public List<Water> getWaterByUserAndDate(User user, LocalDate date) {
@@ -31,10 +29,9 @@ public class WaterServiceImpl implements WaterService {
     }
 
     @Override
-    public WaterDto addWaterIntake(String email, WaterDto waterDto) {
-        Account account = accountRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Account with email " + email + " not found."));
-        User user = account.getUser();
+    public WaterDto addWaterIntake(Long id, WaterDto waterDto) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+                "User with id " + id + " not found."));
         Water water = mapToWater(waterDto);
         water.setUser(user);
         waterRepository.save(water);
@@ -42,10 +39,9 @@ public class WaterServiceImpl implements WaterService {
     }
 
     @Override
-    public WaterDto deleteWaterIntake(String email) { // delete all water in current date
-        Account account = accountRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("Account with email " + email + " not found."));
-        User user = account.getUser();
+    public WaterDto deleteWaterIntake(Long id) { // delete all water in current date
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+                "User with id " + id + " not found."));
 
         waterRepository.deleteByUserAndTimeRange(user, LocalDate.now().atStartOfDay(),
                 LocalDate.now().atStartOfDay().plusDays(1));

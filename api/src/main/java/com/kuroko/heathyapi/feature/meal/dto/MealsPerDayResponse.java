@@ -10,29 +10,29 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class MealsPerDayDto {
+public class MealsPerDayResponse {
 
         private double totalConsumedCaloriesPerDay;
         private double totalConsumedCarbohydratesPerDay;
         private double totalConsumedFatPerDay;
         private double totalConsumedProteinPerDay;
 
-        private MealDto breakfast;
-        private MealDto lunch;
-        private MealDto dinner;
-        private MealDto snack;
+        private MealResponse breakfast;
+        private MealResponse lunch;
+        private MealResponse dinner;
+        private MealResponse snack;
 
-        public MealsPerDayDto(List<Meal> meals) {
-                this.breakfast = new MealDto(
+        public MealsPerDayResponse(List<Meal> meals) {
+                this.breakfast = new MealResponse(
                                 meals.stream().filter(m -> m.getType().equals(MealType.BREAKFAST)).findFirst()
                                                 .orElse(null));
-                this.lunch = new MealDto(
+                this.lunch = new MealResponse(
                                 meals.stream().filter(m -> m.getType().equals(MealType.LUNCH)).findFirst()
                                                 .orElse(null));
-                this.dinner = new MealDto(
+                this.dinner = new MealResponse(
                                 meals.stream().filter(m -> m.getType().equals(MealType.DINNER)).findFirst()
                                                 .orElse(null));
-                this.snack = new MealDto(
+                this.snack = new MealResponse(
                                 meals.stream().filter(m -> m.getType().equals(MealType.SNACK)).findFirst()
                                                 .orElse(null));
 

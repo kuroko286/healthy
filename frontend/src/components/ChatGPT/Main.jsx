@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { selectUserData } from '../../redux/selesctors';
+import { selectUserData } from '../../redux/selectors';
 import SockJS from 'sockjs-client';
 import { over } from 'stompjs';
 

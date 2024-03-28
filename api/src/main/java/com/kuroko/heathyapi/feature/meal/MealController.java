@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kuroko.heathyapi.feature.food.dto.AddFoodDto;
-import com.kuroko.heathyapi.feature.food.dto.FoodIntakeData;
-import com.kuroko.heathyapi.feature.meal.dto.MealsPerDayDto;
+import com.kuroko.heathyapi.feature.food.dto.AddFoodRequest;
+import com.kuroko.heathyapi.feature.food.dto.UpdateFoodRequest;
+import com.kuroko.heathyapi.feature.meal.dto.MealsPerDayResponse;
 import com.kuroko.heathyapi.feature.meal.model.MealType;
 import com.kuroko.heathyapi.feature.meal.service.MealService;
 
@@ -25,30 +25,6 @@ import com.kuroko.heathyapi.feature.meal.service.MealService;
 @RequestMapping("/v1/meals")
 public class MealController {
     @Autowired
-    private MealService mealServicer;
-
-    @PostMapping("/food-intake")
-    public ResponseEntity<MealsPerDayDto> addFoodIntake(@RequestAttribute("email") String email,
-            @RequestBody AddFoodDto addFoodDto) {
-        MealsPerDayDto response = mealServicer.addFoodIntake(email, addFoodDto);
-        return ResponseEntity.ok().body(response);
-    }
-
-    @PutMapping("/food-intake/{foodId}")
-    public ResponseEntity<MealsPerDayDto> updateFoodIntake(@RequestAttribute("email") String email,
-            @PathVariable Long foodId,
-            @RequestBody FoodIntakeData mealDto) {
-        MealsPerDayDto response = mealServicer.updateFoodIntake(email, foodId, mealDto);
-        return ResponseEntity.ok().body(response);
-    }
-
-    @DeleteMapping("/food-intake")
-    public ResponseEntity<MealsPerDayDto> deleteFoodIntake(@RequestAttribute("email") String email,
-            @RequestBody String mealType) {
-        Map<String, MealType> mealTypeMap = Map.of("breakfast", MealType.BREAKFAST, "lunch", MealType.LUNCH, "dinner",
-                MealType.DINNER, "snack", MealType.SNACK);
-        MealsPerDayDto response = mealServicer.deleteFoodIntake(email, mealTypeMap.get(mealType));
-        return ResponseEntity.ok().body(response);
-    }
+    private MealService mealService;
 
 }

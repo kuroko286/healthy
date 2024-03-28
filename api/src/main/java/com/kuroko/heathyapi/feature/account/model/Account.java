@@ -21,10 +21,8 @@ public class Account {
     private Long id;
     private String email;
     private String password;
-
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
-    private String providerId;
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)

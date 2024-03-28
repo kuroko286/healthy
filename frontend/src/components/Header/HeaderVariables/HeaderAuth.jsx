@@ -35,7 +35,7 @@ import { UserModal } from '../Modals/UserModal';
 import { MenuModal } from '../Modals/MenuModal';
 import { LogOutModal } from '../Modals/LogoutModal';
 import { useSelector } from 'react-redux';
-import { selectUserData } from '../../../redux/selesctors';
+import { selectUserData } from '../../../redux/selectors';
 
 export const HeaderAuth = () => {
   const [goalModal, setGoalModal] = useState(false);
@@ -85,7 +85,7 @@ export const HeaderAuth = () => {
     };
   }, []);
 
-  const { user } = useSelector(selectUserData);
+  const { info: user } = useSelector(selectUserData);
 
   const testInfo = {
     name: user ? user.name : '',

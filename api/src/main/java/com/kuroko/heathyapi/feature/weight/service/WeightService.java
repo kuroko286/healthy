@@ -4,5 +4,5 @@ import com.kuroko.heathyapi.feature.weight.dto.WeightDto;
 import com.kuroko.heathyapi.feature.weight.dto.WeightUpdatedDto;
 
 public interface WeightService {
-    WeightUpdatedDto createWeight(String email, WeightDto weightDto);
+    WeightUpdatedDto createWeight(Long id, WeightDto weightDto);
 }

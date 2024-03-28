@@ -19,12 +19,14 @@ import {
 } from './RecordDiaryModal.styled';
 import icons from '../../../../assets/icons.svg';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addFoodIntake, getCurrentUser } from '../../../../redux/operations';
 import { useFormik } from 'formik';
+import { selectUserId } from '../../../../redux/selectors';
 
 const RecordDiaryModal = ({ onClose, image, mealType, onRecord }) => {
   const dispatch = useDispatch();
+  const userId = useSelector(selectUserId);
 
   const formik = useFormik({
     initialValues: {
@@ -61,9 +63,9 @@ const RecordDiaryModal = ({ onClose, image, mealType, onRecord }) => {
             })),
           };
 
-          await dispatch(addFoodIntake(foodIntakeData));
+          await dispatch(addFoodIntake({ userId, foodIntakeData }));
           onRecord(foodIntakeData);
-          await dispatch(getCurrentUser());
+          await dispatch(getCurrentUser(userId));
 
           onClose();
         }

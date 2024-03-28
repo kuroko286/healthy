@@ -33,7 +33,7 @@ import snackImage from '../../../assets/meals/snack-image.svg';
 import icons from './../../../assets/icons.svg';
 
 import { useState, useEffect } from 'react';
-import { selectUserData } from '../../../redux/selesctors';
+import { selectUserData } from '../../../redux/selectors';
 import { useSelector } from 'react-redux';
 import RecordDiaryModal from '../../MainComponents/Diary/Modal/RecordDiaryModal';
 import EditDiaryModal from '../../MainComponents/Diary/Modal/EditDiaryModal';

@@ -15,7 +15,7 @@ import {
 } from '../operations';
 
 const initialState = {
-  data: {},
+  user: {},
   statistics: {},
   recommendedFood: [],
   isLoading: false,
@@ -47,7 +47,7 @@ const dataSlice = createSlice({
       .addCase(getCurrentUser.pending, handlePending)
       .addCase(getCurrentUser.rejected, handleRejected)
       .addCase(getCurrentUser.fulfilled, (state, action) => {
-        state.data = action.payload;
+        state.user = action.payload;
         state.isLoading = false;
         state.error = null;
       })

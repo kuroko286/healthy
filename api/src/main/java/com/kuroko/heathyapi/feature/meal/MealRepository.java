@@ -13,7 +13,7 @@ import com.kuroko.heathyapi.feature.user.model.User;
 
 public interface MealRepository extends JpaRepository<Meal, Long> {
         @Query("select m from Meal m where m.user = :user and m.createdAt between :startDate and :endDate")
-        List<Meal> findByUserAndDateRange(@Param("user") User user, @Param("startDate") LocalDateTime startDate,
+        List<Meal> findByUserAndTimeRange(@Param("user") User user, @Param("startDate") LocalDateTime startDate,
                         @Param("endDate") LocalDateTime endDate);
 
         @Query("select m from Meal m where m.user = :user and m.createdAt between :startDate and :endDate and m.type = :type")

@@ -29,17 +29,19 @@ import Illustration from '../../assets/pageIllustrations.svg';
 import { Formik, Form } from 'formik';
 import icons from '../../assets/icons.svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUserData } from '../../redux/selesctors';
+import { selectUserData, selectUserId } from '../../redux/selectors';
 import {
   addUserAvatar,
   getCurrentUser,
   updateUserInformation,
 } from '../../redux/operations';
 import { useState, useEffect } from 'react';
+import { CoefficientOfActivity, Gender } from '../../constants/user';
 
 export default function SettingsPage() {
-  const { user } = useSelector(selectUserData);
+  const { info: user } = useSelector(selectUserData);
   const dispatch = useDispatch();
+  const userId = useSelector(selectUserId);
 
   const initialValues = {
     age: user && user.age !== undefined ? user.age : '',
@@ -63,20 +65,20 @@ export default function SettingsPage() {
     );
 
     if (JSON.stringify(initialValues) !== JSON.stringify(values)) {
-      dispatch(updateUserInformation(updatedValues));
+      dispatch(updateUserInformation({ userId, updatedValues }));
     }
 
     avatar !== '' &&
       typeof avatar === 'object' &&
       avatar instanceof File &&
-      dispatch(addUserAvatar({ avatar }));
+      dispatch(addUserAvatar({ userId, avatar }));
 
     setTimeout(() => {
-      dispatch(getCurrentUser());
+      dispatch(getCurrentUser(userId));
       setAvatar(user.avatarURL);
       avatar !== '' && typeof avatar === 'object' && setObjectURL(false);
 
-      window.location.href = '/healthy_hub/main ';
+      window.location.href = '/main ';
     }, 2300);
   };
 
@@ -189,14 +191,22 @@ export default function SettingsPage() {
                 Gender
                 <GenderRadios>
                   <RadioLabel>
-                    <RadioField type="radio" name="gender" value="male" />
+                    <RadioField
+                      type="radio"
+                      name="gender"
+                      value={Gender.MALE}
+                    />
                     Male
                     <CustomRadio>
                       <span></span>
                     </CustomRadio>
                   </RadioLabel>
                   <RadioLabel>
-                    <RadioField type="radio" name="gender" value="female" />
+                    <RadioField
+                      type="radio"
+                      name="gender"
+                      value={Gender.FEMALE}
+                    />
                     Female
                     <CustomRadio>
                       <span></span>
@@ -235,63 +245,66 @@ export default function SettingsPage() {
                     type="radio"
                     id="coefficientOfActivity1"
                     name="coefficientOfActivity"
-                    value={'1.2'}
+                    value={CoefficientOfActivity.VERY_LOW}
                   />
                   <CustomRadio>
                     <span></span>
                   </CustomRadio>
-                  1.2 - if you do not have physical activity and sedentary work
+                  {CoefficientOfActivity.VERY_LOW} - if you do not have physical
+                  activity and sedentary work
                 </RadioLabel>
                 <RadioLabel>
                   <RadioField
                     type="radio"
                     id="coefficientOfActivity2"
                     name="coefficientOfActivity"
-                    value={'1.375'}
+                    value={CoefficientOfActivity.LOW}
                   />
                   <CustomRadio>
                     <span></span>
                   </CustomRadio>
-                  1.375 - if you do short runs or light gymnastics 1-3 times a
-                  week
+                  {CoefficientOfActivity.LOW} - if you do short runs or light
+                  gymnastics 1-3 times a week
                 </RadioLabel>
                 <RadioLabel>
                   <RadioField
                     type="radio"
                     id="coefficientOfActivity3"
                     name="coefficientOfActivity"
-                    value={'1.55'}
+                    value={CoefficientOfActivity.MEDIUM}
                   />
                   <CustomRadio>
                     <span></span>
                   </CustomRadio>
-                  1.55 - if you play sports with average loads 3-5 times a week
+                  {CoefficientOfActivity.MEDIUM} - if you play sports with
+                  average loads 3-5 times a week
                 </RadioLabel>
                 <RadioLabel>
                   <RadioField
                     type="radio"
                     id="coefficientOfActivity4"
                     name="coefficientOfActivity"
-                    value={'1.725'}
+                    value={CoefficientOfActivity.HIGH}
                   />
                   <CustomRadio>
                     <span></span>
                   </CustomRadio>
-                  1.725 - if you train fully 6-7 times a week
+                  {CoefficientOfActivity.HIGH} - if you train fully 6-7 times a
+                  week
                 </RadioLabel>
                 <RadioLabel>
                   <RadioField
                     type="radio"
                     id="coefficientOfActivity4"
                     name="coefficientOfActivity"
-                    value={'1.9'}
+                    value={CoefficientOfActivity.VERY_HIGH}
                   />
                   <CustomRadio>
                     <span></span>
                   </CustomRadio>
-                  1.9 - if your work is related to physical labor, you train 2
-                  times a day and include strength exercises in your training
-                  program
+                  {CoefficientOfActivity.VERY_HIGH} - if your work is related to
+                  physical labor, you train 2 times a day and include strength
+                  exercises in your training program
                 </RadioLabel>
               </YourActivityInput>
             </FormInputs>

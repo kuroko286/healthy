@@ -21,17 +21,6 @@ public class WaterController {
     @Autowired
     private WaterService waterService;
 
-    @PostMapping("/water-intake")
-    public ResponseEntity<WaterDto> addWaterIntake(@RequestAttribute("email") String email,
-            @RequestBody WaterDto waterDto) {
-        WaterDto water = waterService.addWaterIntake(email, waterDto);
-        return ResponseEntity.ok().body(water);
-    }
-
-    @DeleteMapping("/water-intake")
-    public ResponseEntity<WaterDto> deleteWaterIntake(@RequestAttribute("email") String email) {
-        WaterDto water = waterService.deleteWaterIntake(email);
-        return ResponseEntity.ok().body(water);
-    }
+    // implement crud
 
 }

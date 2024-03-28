@@ -1,17 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { removeCookie } from '../utils/Cookie';
 
-// axios.defaults.baseURL = 'https://healthy-hub-rest-api.onrender.com/api';
 axios.defaults.baseURL = 'http://localhost:8080/v1';
-
-export const setAuthToken = (token) => {
-  axios.defaults.headers.common.Authorization = `Bearer ${token || ''}`;
-};
-
-const clearAuthHeader = () => {
-  axios.defaults.headers.common.Authorization = '';
-};
+axios.defaults.withCredentials = true;
 
 // Authorization
 
@@ -19,10 +12,7 @@ export const signup = createAsyncThunk(
   'auth/signup',
   async (credentials, thunkAPI) => {
     try {
-      console.log(credentials);
-      const res = await axios.post('/auth/signup', credentials);
-      console.log(res);
-      setAuthToken(res.data.token);
+      const res = await axios.post('/auth/register', credentials);
       toast.success('Successfully sign up!');
       return res.data;
     } catch (error) {
@@ -36,8 +26,7 @@ export const signin = createAsyncThunk(
   'auth/signin',
   async (credentials, thunkAPI) => {
     try {
-      const res = await axios.post('/auth/signin', credentials);
-      setAuthToken(res.data.token);
+      const res = await axios.post('/auth/login', credentials);
       toast.success('Successfully sign in!');
       return res.data;
     } catch (error) {
@@ -50,9 +39,9 @@ export const signin = createAsyncThunk(
 export const signOut = createAsyncThunk('auth/signout', async (_, thunkAPI) => {
   try {
     const url = '/auth/signout';
+    removeCookie('user_id');
     await axios.post(url);
     toast.success('Successfully sign out!');
-    clearAuthHeader();
   } catch (error) {
     toast.error(error.message);
     return thunkAPI.rejectWithValue(error.message);
@@ -77,9 +66,9 @@ export const forgotPassword = createAsyncThunk(
 
 export const refreshRecommendedFood = createAsyncThunk(
   'auth/get-recommended-food',
-  async (_, thunkAPI) => {
+  async (userId, thunkAPI) => {
     try {
-      const res = await axios.get('/foods/recommended-food');
+      const res = await axios.get(`/users/${userId}/foods/recommended`);
       return res.data;
     } catch (error) {
       toast.error(error.message);
@@ -92,10 +81,11 @@ export const refreshRecommendedFood = createAsyncThunk(
 
 export const getMonthlyStatistics = createAsyncThunk(
   'auth/getMonthlyStatistics',
-  async (month, thunkAPI) => {
+  async ({ userId, month, year }, thunkAPI) => {
     try {
-      const res = await axios.get('/users/statistics', {
-        params: { month },
+      console.log(month);
+      const res = await axios.get(`/users/${userId}/statistics`, {
+        params: { month, year },
       });
       return res.data;
     } catch (error) {
@@ -107,9 +97,9 @@ export const getMonthlyStatistics = createAsyncThunk(
 
 export const getCurrentUser = createAsyncThunk(
   'auth/getCurrentUser',
-  async (_, thunkAPI) => {
+  async (userId, thunkAPI) => {
     try {
-      const res = await axios.get('/users/current');
+      const res = await axios.get(`/users/${userId}`);
       return res.data;
     } catch (error) {
       toast.error(error.message);
@@ -120,9 +110,9 @@ export const getCurrentUser = createAsyncThunk(
 
 export const updateUserInformation = createAsyncThunk(
   'auth/updateUserInformation',
-  async (userData, thunkAPI) => {
+  async ({ userId, updatedValues: userData }, thunkAPI) => {
     try {
-      const res = await axios.put('/users', userData);
+      const res = await axios.put(`/users/${userId}`, userData);
       toast.success('User information updated');
       return res.data;
     } catch (error) {
@@ -134,9 +124,9 @@ export const updateUserInformation = createAsyncThunk(
 
 export const updateUserGoal = createAsyncThunk(
   'auth/updateUserGoal',
-  async (goalData, thunkAPI) => {
+  async ({ userId, values: goalData }, thunkAPI) => {
     try {
-      const res = await axios.put('/users/goal', goalData);
+      const res = await axios.put(`/users/${userId}/goal`, goalData);
       toast.success('Goal updated');
       return res.data;
     } catch (error) {
@@ -148,9 +138,9 @@ export const updateUserGoal = createAsyncThunk(
 
 export const addUserWeight = createAsyncThunk(
   'auth/addUserWeight',
-  async (weightData, thunkAPI) => {
+  async ({ userId, values: weightData }, thunkAPI) => {
     try {
-      const res = await axios.post('/weight', weightData);
+      const res = await axios.post(`/users/${userId}/weights`, weightData);
       toast.success('Weight updated');
       return res.data;
     } catch (error) {
@@ -162,9 +152,9 @@ export const addUserWeight = createAsyncThunk(
 
 export const addFoodIntake = createAsyncThunk(
   'auth/addFoodIntake',
-  async (foodIntakeData, thunkAPI) => {
+  async ({ userId, foodIntakeData }, thunkAPI) => {
     try {
-      const res = await axios.post('/meals/food-intake', foodIntakeData);
+      const res = await axios.post(`/users/${userId}/foods`, foodIntakeData);
       toast.success('Meal added');
       return res.data;
     } catch (error) {
@@ -176,11 +166,9 @@ export const addFoodIntake = createAsyncThunk(
 
 export const deleteFoodIntake = createAsyncThunk(
   'auth/deleteFoodIntake',
-  async (mealType, thunkAPI) => {
+  async ({ userId, mealType }, thunkAPI) => {
     try {
-      const res = await axios.delete('/meals/food-intake', {
-        data: mealType,
-      });
+      const res = await axios.delete(`/users/${userId}/meals?type=${mealType}`);
       toast.success('Meal deleted');
       return res.data;
     } catch (error) {
@@ -192,9 +180,9 @@ export const deleteFoodIntake = createAsyncThunk(
 
 export const addWaterIntake = createAsyncThunk(
   'auth/addWaterIntake',
-  async (waterIntakeData, thunkAPI) => {
+  async ({ userId, waterIntakeData }, thunkAPI) => {
     try {
-      const res = await axios.post('/water/water-intake', waterIntakeData);
+      const res = await axios.post(`users/${userId}/waters`, waterIntakeData);
       toast.success('Water added');
       return res.data;
     } catch (error) {
@@ -206,9 +194,9 @@ export const addWaterIntake = createAsyncThunk(
 
 export const deleteWaterIntake = createAsyncThunk(
   'auth/deleteWaterIntake',
-  async (_, thunkAPI) => {
+  async (userId, thunkAPI) => {
     try {
-      const res = await axios.delete('/water/water-intake');
+      const res = await axios.delete(`/users/${userId}/waters`);
       toast.success('Water deleted');
       return res.data;
     } catch (error) {
@@ -220,11 +208,11 @@ export const deleteWaterIntake = createAsyncThunk(
 
 export const updateFoodIntake = createAsyncThunk(
   'auth/updateFoodIntake',
-  async ({ foodId, foodIntakeData }, thunkAPI) => {
+  async ({ userId, foodInfo }, thunkAPI) => {
     try {
       const res = await axios.put(
-        `/meals/food-intake/${foodId}`,
-        foodIntakeData
+        `/users/${userId}/foods/${foodInfo.foodId}`,
+        foodInfo.foodIntakeData
       );
       toast.success('Meal updated');
       return res.data;
@@ -237,9 +225,9 @@ export const updateFoodIntake = createAsyncThunk(
 
 export const addUserAvatar = createAsyncThunk(
   'auth/addUserAvatar',
-  async (avatarData, thunkAPI) => {
+  async ({ userId, avatar }, thunkAPI) => {
     try {
-      const res = await axios.post('/users/avatar', avatarData, {
+      const res = await axios.post(`/users/${userId}/avatar`, avatar, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'x-rapidapi-host': 'file-upload8.p.rapidapi.com',

@@ -11,7 +11,7 @@ import com.kuroko.heathyapi.feature.water.dto.WaterDto;
 public interface WaterService {
     List<Water> getWaterByUserAndDate(User user, LocalDate date);
 
-    WaterDto addWaterIntake(String email, WaterDto waterDto);
+    WaterDto addWaterIntake(Long id, WaterDto waterDto);
 
-    WaterDto deleteWaterIntake(String email);
+    WaterDto deleteWaterIntake(Long id);
 }

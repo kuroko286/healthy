@@ -7,9 +7,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.kuroko.heathyapi.enums.TokenState;
 
 import java.security.Key;
 import java.util.Date;
@@ -24,6 +27,9 @@ public class JwtService {
     private String secretKey;
     @Value("${app.jwt-expiration-milliseconds}")
     private long jwtExpiration;
+
+    @Autowired
+    private RedisService redisService;
 
     // in here, username is email
     public String extractUsername(String token) {
@@ -52,9 +58,22 @@ public class JwtService {
                 .compact();
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    public boolean isTokenValid(String token) {
+        if (redisService.getValue(token) != null && redisService.getValue(token).equals(TokenState.VALID.toString())) {
+            System.out.println("valid jwt from redis");
+            return true;
+        }
+        // if (redisService.getValue(token) != null
+        // && redisService.getValue(token).equals(TokenState.INVALID.toString())) {
+        // System.out.println("invalid jwt from redis");
+        // return false;
+        // }
+        boolean result = !isTokenExpired(token);
+        if (result) {
+            redisService.setValue(token, TokenState.VALID.toString());
+            System.out.println("cached jwt to redis");
+        }
+        return result;
     }
 
     private boolean isTokenExpired(String token) {
@@ -77,5 +96,16 @@ public class JwtService {
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String generateToken(String username) {
+        return Jwts
+                .builder()
+                .setClaims(new HashMap<>())
+                .setSubject(username) // subject is email
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 }

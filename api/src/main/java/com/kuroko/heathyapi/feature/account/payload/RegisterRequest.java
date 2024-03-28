@@ -1,7 +1,5 @@
 package com.kuroko.heathyapi.feature.account.payload;
 
-import com.kuroko.heathyapi.feature.account.model.Account;
-
 import jakarta.validation.constraints.*;
 import lombok.Data;
 

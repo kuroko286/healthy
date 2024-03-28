@@ -8,7 +8,7 @@ import {
 } from './DailyGoal.styled';
 import icons from '../../../assets/icons.svg';
 import { useSelector } from 'react-redux';
-import { selectUserData } from '../../../redux/selesctors';
+import { selectUserData } from '../../../redux/selectors';
 
 export default function DailyGoal() {
   const userData = useSelector(selectUserData);
@@ -23,7 +23,7 @@ export default function DailyGoal() {
           </svg>
           <div>
             <StyledName>Calories</StyledName>
-            <StyledValue>{userData.user?.dailyCalories}</StyledValue>
+            <StyledValue>{userData.info?.dailyCalories}</StyledValue>
           </div>
         </Cont>
         <Cont>
@@ -33,7 +33,7 @@ export default function DailyGoal() {
           <div>
             <StyledName>Water</StyledName>
             <StyledValue>
-              {userData.user?.dailyWater} <span>ml</span>
+              {userData.info?.dailyWater} <span>ml</span>
             </StyledValue>
           </div>
         </Cont>

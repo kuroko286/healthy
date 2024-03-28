@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
-import { selectToken } from '../../redux/selesctors';
+import { selectIsLoggedIn } from '../../redux/selectors';
 import { HeaderAuth } from './HeaderVariables/HeaderAuth';
 import { HeaderNotAuth } from './HeaderVariables/HeaderNotAuth';
 
 export const Header = () => {
-  const isLogedin = useSelector(selectToken);
+  const isLogedin = useSelector(selectIsLoggedIn);
   return <>{isLogedin ? <HeaderAuth /> : <HeaderNotAuth />}</>;
 };
